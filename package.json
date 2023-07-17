@@ -1,0 +1,66 @@
+{
+      "name": "@matrixages/knife",
+      "version": "1.2.0",
+      "description": "Util collections for react, nodejs, web.",
+      "author": "Wendao",
+      "license": "MIT",
+      "homepage": "https://github.com/matrixages/knife",
+      "repository": {
+            "type": "git",
+            "url": "git+https://github.com/matrixages/knife.git"
+      },
+      "exports": {
+            "./node": {
+                  "default": "./node/index.js",
+                  "types": "./node/index.d.ts"
+            },
+            "./react": {
+                  "default": "./react/index.js",
+                  "types": "./react/index.d.ts"
+            },
+            "./storage": {
+                  "default": "./storage/index.js",
+                  "types": "./storage/index.d.ts"
+            },
+            "./types": {
+                  "default": "./types/index.js",
+                  "types": "./types/index.d.ts"
+            }
+      },
+      "files": [
+            "./node",
+            "./react",
+            "./storage",
+            "./types",
+            "./package.json",
+            "./README.md"
+      ],
+      "scripts": {
+            "clear": "tsx ./build/clear.ts",
+            "move": "tsx ./build/after.ts",
+            "dev": "rspack build --watch",
+            "build": "pnpm run clear && rspack build && tsc && pnpm run move"
+      },
+      "keywords": [
+            "react",
+            "nodejs",
+            "web",
+            "utils",
+            "typescript"
+      ],
+      "dependencies": {
+            "fast-equals": "^4.0.3",
+            "react": "^18.2.0"
+      },
+      "devDependencies": {
+            "@rspack/cli": "^0.2.4",
+            "ts-node": "^10.9.1",
+            "@types/fs-extra": "^11.0.1",
+            "@types/node": "^18.13.0",
+            "@types/react": "^18.0.28",
+            "fast-glob": "^3.2.12",
+            "fs-extra": "^11.1.0",
+            "tsx": "^3.12.7",
+            "typescript": "^5.1.6"
+      }
+}
