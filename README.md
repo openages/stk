@@ -1,2 +1,3 @@
-# knife
-Util collections for react, nodejs, web.
+# craftkit
+
+The base kit for your craft.
