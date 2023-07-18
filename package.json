@@ -1,40 +1,24 @@
 {
       "name": "@openages/craftkit",
-      "version": "1.2.0",
+      "version": "1.0.0",
       "description": "The base kit for your craft.",
-      "author": "Wendao",
+      "author": "Whatreal",
       "license": "MIT",
       "homepage": "https://github.com/openages/craftkit",
       "repository": {
             "type": "git",
             "url": "git+https://github.com/openages/craftkit.git"
       },
-      "exports": {
-            "./react": {
-                  "default": "./react/index.js",
-                  "types": "./react/index.d.ts"
-            },
-            "./storage": {
-                  "default": "./storage/index.js",
-                  "types": "./storage/index.d.ts"
-            },
-            "./types": {
-                  "default": "./types/index.js",
-                  "types": "./types/index.d.ts"
-            }
-      },
+      "main":"dist/main.js",
+      "types": "dist/index.d.ts",
       "files": [
-            "./react",
-            "./storage",
-            "./types",
+            "./dist",
             "./package.json",
             "./README.md"
       ],
       "scripts": {
-            "clear": "tsx ./build/clear.ts",
-            "move": "tsx ./build/after.ts",
             "dev": "rspack build --watch",
-            "build": "pnpm run clear && rspack build && tsc && pnpm run move"
+            "build": "rspack build && tsc"
       },
       "keywords": [
             "react",

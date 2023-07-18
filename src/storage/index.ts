@@ -4,12 +4,6 @@ import { decode, encode } from './proxy/transform'
 import { createExpiredFunc, prefix, proxyMap, StorageValue } from './shared'
 import { isObject } from './utils'
 
-export { setPrefix } from './shared'
-export { encode, decode }
-
-export const local: any = createProxyStorage(localStorage)
-export const session: any = createProxyStorage(sessionStorage)
-
 if (typeof window !== 'undefined') {
 	window.addEventListener('storage', (e: StorageEvent) => {
 		if (e.key && e.key.startsWith(prefix)) {
@@ -36,3 +30,9 @@ if (typeof window !== 'undefined') {
 		}
 	})
 }
+
+export { setPrefix } from './shared'
+export { encode, decode }
+
+export const local: any = createProxyStorage(localStorage)
+export const session: any = createProxyStorage(sessionStorage)
