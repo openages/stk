@@ -5,11 +5,6 @@ package-lock.json
 
 # production
 **/dist
-node
-react
-storage
-types
-!src/*
 
 # misc
 .DS_Store
