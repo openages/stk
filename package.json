@@ -1,19 +1,15 @@
 {
-      "name": "@matrixages/knife",
+      "name": "@openages/craftkit",
       "version": "1.2.0",
-      "description": "Util collections for react, nodejs, web.",
+      "description": "The base kit for your craft.",
       "author": "Wendao",
       "license": "MIT",
-      "homepage": "https://github.com/matrixages/knife",
+      "homepage": "https://github.com/openages/craftkit",
       "repository": {
             "type": "git",
-            "url": "git+https://github.com/matrixages/knife.git"
+            "url": "git+https://github.com/openages/craftkit.git"
       },
       "exports": {
-            "./node": {
-                  "default": "./node/index.js",
-                  "types": "./node/index.d.ts"
-            },
             "./react": {
                   "default": "./react/index.js",
                   "types": "./react/index.d.ts"
@@ -28,7 +24,6 @@
             }
       },
       "files": [
-            "./node",
             "./react",
             "./storage",
             "./types",
@@ -49,17 +44,17 @@
             "typescript"
       ],
       "dependencies": {
-            "fast-equals": "^4.0.3",
+            "fast-equals": "^5.0.1",
             "react": "^18.2.0"
       },
       "devDependencies": {
-            "@rspack/cli": "^0.2.4",
+            "@rspack/cli": "^0.2.7",
             "ts-node": "^10.9.1",
             "@types/fs-extra": "^11.0.1",
-            "@types/node": "^18.13.0",
-            "@types/react": "^18.0.28",
-            "fast-glob": "^3.2.12",
-            "fs-extra": "^11.1.0",
+            "@types/node": "^20.4.2",
+            "@types/react": "^18.2.15",
+            "fast-glob": "^3.3.0",
+            "fs-extra": "^11.1.1",
             "tsx": "^3.12.7",
             "typescript": "^5.1.6"
       }
