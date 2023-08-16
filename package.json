@@ -29,10 +29,10 @@
       ],
       "dependencies": {
             "fast-equals": "^5.0.1",
-            "react": "^18.2.0"
+            "react": "0.0.0-experimental-0fb5b61ac-20230814"
       },
       "devDependencies": {
-            "@rspack/cli": "^0.2.7",
+            "@rspack/cli": "^0.2.12",
             "ts-node": "^10.9.1",
             "@types/fs-extra": "^11.0.1",
             "@types/node": "^20.4.2",
