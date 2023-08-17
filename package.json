@@ -9,7 +9,7 @@
             "type": "git",
             "url": "git+https://github.com/openages/craftkit.git"
       },
-      "main":"dist/main.js",
+      "main": "dist/main.js",
       "types": "dist/index.d.ts",
       "files": [
             "./dist",
@@ -28,17 +28,18 @@
             "typescript"
       ],
       "dependencies": {
+            "ahooks": "^3.7.8",
             "fast-equals": "^5.0.1",
             "react": "0.0.0-experimental-0fb5b61ac-20230814"
       },
       "devDependencies": {
             "@rspack/cli": "^0.2.12",
-            "ts-node": "^10.9.1",
             "@types/fs-extra": "^11.0.1",
             "@types/node": "^20.4.2",
             "@types/react": "^18.2.15",
             "fast-glob": "^3.3.0",
             "fs-extra": "^11.1.1",
+            "ts-node": "^10.9.1",
             "tsx": "^3.12.7",
             "typescript": "^5.1.6"
       }

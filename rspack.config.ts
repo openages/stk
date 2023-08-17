@@ -7,10 +7,10 @@ const is_prod = process.env.NODE_ENV === 'production'
 module.exports = defineConfig({
 	entry: './src/index.ts',
 	output: {
-            clean: is_prod,
-            library: {
-                  type:'commonjs'
-            }
+		clean: is_prod,
+		library: {
+			type: 'commonjs'
+		}
 	},
 	resolve: {
 		alias: {
@@ -18,7 +18,7 @@ module.exports = defineConfig({
 		}
 	},
 	devtool: false,
-	externals: ['react', 'fast-equals'],
+	externals: ['react', 'fast-equals', 'ahooks'],
 	watchOptions: {
 		ignored: /node_modules/
 	},
