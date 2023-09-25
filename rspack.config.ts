@@ -18,7 +18,7 @@ module.exports = defineConfig({
 		}
 	},
 	devtool: false,
-	externals: ['react', 'fast-equals', 'ahooks'],
+	externals: ['react', 'fast-equals', 'ahooks', 'mobx'],
 	watchOptions: {
 		ignored: /node_modules/
 	},

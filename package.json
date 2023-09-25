@@ -30,6 +30,7 @@
       "dependencies": {
             "ahooks": "^3.7.8",
             "fast-equals": "^5.0.1",
+            "mobx": "^6.10.2",
             "react": "0.0.0-experimental-9ba1bbd65-20230922"
       },
       "devDependencies": {
