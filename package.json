@@ -30,7 +30,7 @@
       "dependencies": {
             "ahooks": "^3.7.8",
             "fast-equals": "^5.0.1",
-            "react": "0.0.0-experimental-41f0e9dae-20230907"
+            "react": "0.0.0-experimental-9ba1bbd65-20230922"
       },
       "devDependencies": {
             "@rspack/cli": "^0.2.12",
