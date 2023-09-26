@@ -1,0 +1,61 @@
+import { deepEqual } from 'fast-equals'
+import { get } from 'lodash-es'
+import { observe, reaction, toJS } from 'mobx'
+
+import type { IValueDidChange } from 'mobx'
+
+type Listener = Record<string, (...args: any) => any>
+
+export default (instance: any) => {
+	const watch = instance.watch
+	const reactions = {} as Listener
+	const observes = {} as Listener
+
+	Object.keys(watch).map((item) => {
+		if (item.indexOf('.') !== -1) {
+			reactions[item] = watch[item]
+		} else {
+			observes[item] = watch[item]
+		}
+	})
+
+	const reactions_disposers = Object.keys(reactions).map((key) => {
+		return reaction(
+			() => get(instance, key),
+			(new_value, old_value) => {
+				const new_v = toJS(new_value)
+				const old_v = toJS(old_value)
+
+				if (!deepEqual(new_v, old_v)) {
+					reactions[key](new_v, old_v)
+				}
+			}
+		)
+	})
+
+	const observes_disposer = observe(instance, (change: IValueDidChange & { name: string }) => {
+		const { name, newValue, oldValue } = change
+		const multiple_props = Object.keys(observes).find((item) => item.indexOf(name) !== -1 && item !== name)
+
+		if (multiple_props) {
+			if (multiple_props.indexOf('|') !== -1) {
+				const match_keys = multiple_props.split('|')
+
+				if (match_keys.includes(name)) {
+					watch[multiple_props]()
+				}
+			}
+		} else {
+			if (watch[name]) {
+				const new_v = toJS(newValue)
+				const old_v = toJS(oldValue)
+
+				if (!deepEqual(new_v, old_v)) {
+					watch[name](new_v, old_v)
+				}
+			}
+		}
+	})
+
+	return [...reactions_disposers, observes_disposer]
+}

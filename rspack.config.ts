@@ -18,9 +18,12 @@ module.exports = defineConfig({
 		}
 	},
 	devtool: false,
-	externals: ['react', 'fast-equals', 'ahooks', 'mobx'],
+	externals: ['react', 'fast-equals', 'ahooks', 'mobx', 'lodash-es'],
 	watchOptions: {
 		ignored: /node_modules/
+	},
+	optimization: {
+		// minimize: false
 	},
 	experiments: {
 		incrementalRebuild: true
