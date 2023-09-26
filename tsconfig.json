@@ -11,6 +11,7 @@
 		"outDir": "dist",
 		"baseUrl": ".",
 		"esModuleInterop": true,
+		"jsx": "react-jsx",
 		"paths": {
 			"@/*": ["./src/*"]
 		},
@@ -19,7 +20,7 @@
 		"ignoreDeprecations": "5.0"
 	},
 	"include": ["src"],
-      "ts-node": {
+	"ts-node": {
 		"compilerOptions": {
 			"module": "commonjs"
 		}
