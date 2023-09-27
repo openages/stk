@@ -9,7 +9,7 @@
             "type": "git",
             "url": "git+https://github.com/openages/craftkit.git"
       },
-      "main": "out/index.js",
+      "main": "dist/index.js",
       "types": "dist/index.d.ts",
       "files": [
             "./dist",
