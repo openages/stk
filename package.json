@@ -1,7 +1,7 @@
 {
-      "name": "@openages/craftkit",
+      "name": "@openages/stk",
       "version": "1.0.0",
-      "description": "The base kit for your craft.",
+      "description": "Shared tookkit for react.",
       "author": "Whatreal",
       "license": "MIT",
       "homepage": "https://github.com/openages/craftkit",
