@@ -1,3 +1,3 @@
-# craftkit
+# STK
 
-The base kit for your craft.
+Shared tookkit for react.
