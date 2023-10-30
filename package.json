@@ -35,11 +35,11 @@
             "react": "0.0.0-experimental-9ba1bbd65-20230922"
       },
       "devDependencies": {
-            "@rspack/cli": "^0.3.7",
+            "@rspack/cli": "^0.3.8",
             "@types/fs-extra": "^11.0.3",
             "@types/lodash-es": "^4.17.10",
-            "@types/node": "^20.8.7",
-            "@types/react": "^18.2.31",
+            "@types/node": "^20.8.9",
+            "@types/react": "^18.2.33",
             "bun": "^1.0.7",
             "bun-types": "^1.0.7",
             "fast-glob": "^3.3.1",
