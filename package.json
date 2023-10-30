@@ -32,7 +32,7 @@
             "fast-equals": "^5.0.1",
             "lodash-es": "^4.17.21",
             "mobx": "^6.10.2",
-            "react": "0.0.0-experimental-9ba1bbd65-20230922"
+            "react": "0.0.0-experimental-8039e6d0b-20231026"
       },
       "devDependencies": {
             "@rspack/cli": "^0.3.8",
