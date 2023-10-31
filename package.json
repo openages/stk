@@ -4,10 +4,10 @@
       "description": "Shared tookkit for react.",
       "author": "Whatreal",
       "license": "MIT",
-      "homepage": "https://github.com/openages/craftkit",
+      "homepage": "https://github.com/openages/stk",
       "repository": {
             "type": "git",
-            "url": "git+https://github.com/openages/craftkit.git"
+            "url": "git+https://github.com/openages/stk.git"
       },
       "main": "dist/index.js",
       "types": "dist/index.d.ts",
