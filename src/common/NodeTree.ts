@@ -1,4 +1,4 @@
-import { get, flatMap, last, initial, cloneDeep } from 'lodash-es'
+import { get, flatMap, last, initial, cloneDeep, find } from 'lodash-es'
 
 type RawNode = {
 	id: string
@@ -12,6 +12,7 @@ type RawNodes = Array<RawNode>
 type RawMap = Map<string, RawNode>
 type TreeItem = RawNode & { children?: Tree }
 type Tree = Array<TreeItem>
+type TreeMap = Record<string, TreeItem>
 
 type ArgsMove = {
 	active_parent_index: Array<number>
@@ -32,7 +33,10 @@ export default class Index {
 	tree = [] as Tree
 
 	public init(raw_nodes: RawNodes) {
-		this.setRawMap(raw_nodes)
+		const raw_tree_map = this.setRawMap(raw_nodes)
+		const { tree, tree_map } = this.getTree(raw_tree_map)
+
+		this.tree = this.sortTree(tree, tree_map)
 	}
 
 	public insert(item: RawNode, focusing_index?: Array<number>) {
@@ -97,10 +101,55 @@ export default class Index {
 	}
 
 	private setRawMap(raw_nodes: RawNodes) {
-		raw_nodes.map((item) => this.raw_map.set(item.id, item))
+		const tree_map = {} as TreeMap
+
+		raw_nodes.map((item) => {
+			this.raw_map.set(item.id, item)
+
+			tree_map[item.id] = item
+		})
+
+		return tree_map
 	}
 
-	private transform(raw_nodes: RawNodes) {}
+	private getTree(tree_map: TreeMap) {
+		const tree = [] as Tree
+
+		this.raw_map.forEach((item) => {
+			if (item.pid) {
+				if (!tree_map[item.pid]?.children?.length) {
+					tree_map[item.pid].children = [item]
+				} else {
+					tree_map[item.pid].children.push(item)
+				}
+			} else {
+				tree.push(item)
+			}
+		})
+
+		return { tree, tree_map }
+	}
+
+	private sortTree(tree: Tree, tree_map: TreeMap) {
+		const _tree = [] as Tree
+		const start_node = find(tree, (item) => !item.prev_id)
+
+		let current = start_node.id
+
+		while (current) {
+			const item = tree_map[current]
+
+			if (item?.children?.length) {
+				item.children = this.sortTree(item.children, tree_map)
+			}
+
+			_tree.push(item)
+
+			current = start_node.next_id
+		}
+
+		return _tree
+	}
 
 	private take(indexes: Array<number>) {
 		const { cloned_item, target_level, target_index } = this.getItem(indexes)
