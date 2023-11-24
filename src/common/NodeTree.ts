@@ -36,7 +36,7 @@ export default class Index {
 	}
 
 	public init(raw_nodes: RawNodes) {
-		const raw_tree_map = this.setRawMap(raw_nodes)
+		const raw_tree_map = this.getRawTreeMap(raw_nodes)
 		const { tree, tree_map } = this.getTree(raw_nodes, raw_tree_map)
 
 		this.tree = this.sortTree(tree, tree_map)
@@ -176,7 +176,7 @@ export default class Index {
 		return { target_level: target_item.children, cloned_item: toJS(target_item) }
 	}
 
-	private setRawMap(raw_nodes: RawNodes) {
+	private getRawTreeMap(raw_nodes: RawNodes) {
 		const tree_map = {} as TreeMap
 
 		raw_nodes.map((item) => {
