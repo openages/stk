@@ -1,4 +1,5 @@
-import { get, flatMap, last, initial, cloneDeep, find } from 'lodash-es'
+import { get, flatMap, last, initial, find, reduceRight, flatten } from 'lodash-es'
+import { makeAutoObservable, toJS } from 'mobx'
 
 type RawNode = {
 	id: string
@@ -9,7 +10,6 @@ type RawNode = {
 }
 
 type RawNodes = Array<RawNode>
-type RawMap = Map<string, RawNode>
 type TreeItem = RawNode & { children?: Tree }
 type Tree = Array<TreeItem>
 type TreeMap = Record<string, TreeItem>
@@ -29,39 +29,42 @@ type ArgsPlace = {
 }
 
 export default class Index {
-	raw_map = new Map() as RawMap
 	tree = [] as Tree
+
+	constructor() {
+		makeAutoObservable(this, null, { autoBind: true })
+	}
 
 	public init(raw_nodes: RawNodes) {
 		const raw_tree_map = this.setRawMap(raw_nodes)
-		const { tree, tree_map } = this.getTree(raw_tree_map)
+		const { tree, tree_map } = this.getTree(raw_nodes, raw_tree_map)
 
 		this.tree = this.sortTree(tree, tree_map)
 	}
 
 	public insert(item: RawNode, focusing_index?: Array<number>) {
-		this.raw_map.set(item.id, item)
+		const { target_level, cloned_item: over_item } = this.getDroppableItem(focusing_index)
 
-		const { target_level } = this.getItem(focusing_index ?? [0])
-		const { effect_items } = this.place({ type: 'push', active_item: item, target_level })
+		const { active_item, effect_items } = this.place({
+			type: 'push',
+			active_item: item,
+			over_item,
+			target_level
+		})
 
-		return { item, effect_items }
+		return { item: active_item, effect_items }
 	}
 
 	public remove(focusing_index: Array<number>) {
 		const { cloned_item, effect_items } = this.take(focusing_index)
 
-		let remove_ids = [] as Array<string>
-
-		this.raw_map.delete(cloned_item.id)
+		let remove_items = [] as Tree
 
 		if (cloned_item?.children?.length) {
-			remove_ids = this.getherIds(cloned_item.children)
-
-			remove_ids.map((id) => this.raw_map.delete(id))
+			remove_items = this.getherItems(cloned_item.children)
 		}
 
-		return { id: cloned_item.id, remove_ids, effect_items }
+		return { id: cloned_item.id, remove_items, effect_items }
 	}
 
 	public update(focusing_index: Array<number>, data: Omit<RawNode, 'id'>) {
@@ -70,53 +73,128 @@ export default class Index {
 
 		target_level[target_index] = target
 
-		this.raw_map.set(item.id, target)
-
 		return target
 	}
 
 	public move(args: ArgsMove) {
 		const { active_parent_index, over_parent_index, droppable } = args
-
 		const effect_items = [] as RawNodes
 
-		const { cloned_item: active_item, effect_items: take_effect_items } = this.take(active_parent_index)
-		const { cloned_item: over_item, target_level } = this.getItem(over_parent_index)
+		const { cloned_item: active_item } = this.getItem(active_parent_index)
+		const { cloned_item: over_item, target_level } = droppable
+			? this.getDroppableItem(over_parent_index)
+			: this.getItem(over_parent_index)
 
-		effect_items.push(...take_effect_items)
+		if (over_item.next_id === active_item.id && !droppable) {
+			return { effect_items }
+		}
 
-		const { effect_items: place_effect_items } = this.place({
-			type: droppable ? 'push' : 'insert',
-			active_item,
-			over_item,
+		const swap = active_item.next_id === over_item.id && !droppable
+
+		let execs = []
+
+		const place = () => {
+			const { effect_items } = this.place({
+				type: droppable ? 'push' : 'insert',
+				active_item,
+				over_item,
+				target_level,
+				over_index: last(over_parent_index)
+			})
+
+			return effect_items
+		}
+
+		const take = () => {
+			const { effect_items } = this.take(active_parent_index, swap)
+
+			return effect_items
+		}
+
+		if (active_item.pid === over_item.pid) {
+			if (last(active_parent_index) < last(over_parent_index)) {
+				execs = [place, take]
+			} else {
+				execs = [take, place]
+			}
+		} else {
+			if (active_parent_index.length > over_parent_index.length) {
+				execs = [take, place]
+			} else {
+				execs = [place, take]
+			}
+		}
+
+		const all_effect_items = flatten(execs.map((func) => func()))
+
+		return { effect_items: this.getUniqEffectItems(all_effect_items) }
+	}
+
+	public getItem(indexes: Array<number>) {
+		let target_level = [] as Array<TreeItem>
+		let target_index = 0
+		let target_item = null as TreeItem
+
+		const target_indexes = this.getIndexes(indexes)
+		const level_indexes = initial(target_indexes)
+
+		target_index = last(indexes)
+		target_item = get(this.tree, target_indexes)
+
+		if (!level_indexes.length) {
+			target_level = this.tree
+		} else {
+			target_level = get(this.tree, level_indexes)
+		}
+
+		return {
+			item: target_item,
+			cloned_item: toJS(target_item),
 			target_level,
-			over_index: last(over_parent_index)
-		})
+			target_index
+		}
+	}
 
-		effect_items.push(...place_effect_items)
+	private getDroppableItem(indexes: Array<number>) {
+		if (!indexes.length) return { target_level: this.tree, cloned_item: null }
 
-		effect_items.map((item) => this.raw_map.set(item.id, item))
+		let target_item = null as TreeItem
+		let target_indexes = [] as Array<number | string>
 
-		return { effect_items }
+		if (indexes.length === 1) {
+			target_indexes = indexes
+		} else {
+			target_indexes = this.getIndexes(indexes)
+		}
+
+		target_item = get(this.tree, target_indexes)
+
+		if (!target_item.children) {
+			target_item.children = []
+		}
+
+		return { target_level: target_item.children, cloned_item: toJS(target_item) }
 	}
 
 	private setRawMap(raw_nodes: RawNodes) {
 		const tree_map = {} as TreeMap
 
 		raw_nodes.map((item) => {
-			this.raw_map.set(item.id, item)
-
 			tree_map[item.id] = item
 		})
 
 		return tree_map
 	}
 
-	private getTree(tree_map: TreeMap) {
+	private getTree(raw_nodes: RawNodes, tree_map: TreeMap) {
 		const tree = [] as Tree
 
-		this.raw_map.forEach((item) => {
+		raw_nodes.forEach((item) => {
 			if (item.pid) {
+				if (!tree_map[item.pid].children) {
+					tree_map[item.pid].children = []
+				}
+
 				if (!tree_map[item.pid]?.children?.length) {
 					tree_map[item.pid].children = [item]
 				} else {
@@ -131,8 +209,10 @@ export default class Index {
 	}
 
 	private sortTree(tree: Tree, tree_map: TreeMap) {
-		const _tree = [] as Tree
+		const target_tree = [] as Tree
 		const start_node = find(tree, (item) => !item.prev_id)
+
+		if (!start_node) return []
 
 		let current = start_node.id
 
@@ -143,15 +223,15 @@ export default class Index {
 				item.children = this.sortTree(item.children, tree_map)
 			}
 
-			_tree.push(item)
+			target_tree.push(item)
 
-			current = start_node.next_id
+			current = item.next_id
 		}
 
-		return _tree
+		return target_tree
 	}
 
-	private take(indexes: Array<number>) {
+	private take(indexes: Array<number>, swap?: boolean) {
 		const { cloned_item, target_level, target_index } = this.getItem(indexes)
 		const effect_items = [] as Array<TreeItem>
 
@@ -160,7 +240,7 @@ export default class Index {
 
 			prev_item.next_id = cloned_item.next_id ?? ''
 
-			effect_items.push(prev_item)
+			effect_items.push(toJS(prev_item))
 		}
 
 		if (cloned_item.next_id) {
@@ -168,7 +248,9 @@ export default class Index {
 
 			next_item.prev_id = cloned_item.prev_id ?? ''
 
-			effect_items.push(next_item)
+			if (swap) next_item.next_id = cloned_item.id
+
+			effect_items.push(toJS(next_item))
 		}
 
 		target_level.splice(target_index, 1)
@@ -186,74 +268,79 @@ export default class Index {
 			if (target_level.length) {
 				const last_item = last(target_level)
 
-				if (over_item) {
-					last_item.next_id = over_item.id
-				}
+				last_item.next_id = active_item.id
 
 				active_item.prev_id = last_item.id
 
-				effect_items.push(last_item)
+				effect_items.push(toJS(last_item))
+			} else {
+				active_item.prev_id = undefined
 			}
 
-			effect_items.push(active_item)
-			target_level.push(active_item)
+			active_item.next_id = undefined
 
-			return { active_item, effect_items }
+			effect_items.push(toJS(active_item))
+			target_level.push(active_item)
 		} else {
 			active_item.pid = over_item.pid
+
+			active_item.prev_id = over_item.id
+			active_item.next_id = over_item.next_id
 
 			if (over_item.next_id) {
 				const next_item = target_level[over_index + 1]
 
-				active_item.next_id = next_item.id
 				next_item.prev_id = active_item.id
 
-				effect_items.push(next_item)
+				effect_items.push(toJS(next_item))
+			} else {
+				active_item.next_id = undefined
 			}
 
-			active_item.prev_id = over_item.id
-			over_item.next_id = active_item.id
+			if (active_item.next_id === over_item.id) {
+				over_item.next_id = active_item.next_id
+			} else {
+				over_item.next_id = active_item.id
+			}
 
-			effect_items.push(active_item)
-			target_level.splice(over_index, 0, active_item)
+			effect_items.push(toJS(active_item))
+			effect_items.push(toJS(over_item))
+
+			target_level.splice(over_index + 1, 0, active_item)
 		}
+
+		return { active_item, effect_items }
 	}
 
-	private getItem(indexes: Array<number>) {
-		let target_level = [] as Array<TreeItem>
-		let target_index = 0
+	private getUniqEffectItems(effect_items: Tree) {
+		return reduceRight(
+			effect_items,
+			(acc, curr) => {
+				if (!acc.some((item) => item['id'] === curr['id'])) {
+					acc.unshift(curr)
+				}
 
-		if (indexes.length === 1) {
-			target_level = this.tree
-			target_index = indexes[0]
-		} else {
-			const level_indexes = initial(indexes)
-
-			target_level = get(
-				this.tree,
-				flatMap(level_indexes, (item) => [item, 'children'])
-			).children as Tree
-
-			target_index = last(indexes)
-		}
-
-		return {
-			item: target_level[target_index],
-			cloned_item: cloneDeep(target_level[target_index]),
-			target_level,
-			target_index
-		}
+				return acc
+			},
+			[] as Tree
+		)
 	}
 
-	private getherIds(tree: Tree) {
+	private getIndexes(indexes: Array<number>) {
+		return flatMap(indexes, (value, index) => {
+			return index < indexes.length - 1 ? [value, 'children'] : [value]
+		})
+	}
+
+	private getherItems(tree: Tree) {
 		return tree.reduce((total, item) => {
-			total.push(item.id)
+			total.push(item)
 
 			if (item?.children?.length) {
-				total.push(...this.getherIds(item.children))
+				total.push(...this.getherItems(item.children))
 			}
 
 			return total
-		}, [] as Array<string>)
+		}, [] as Tree)
 	}
 }
