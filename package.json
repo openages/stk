@@ -32,13 +32,13 @@
             "fast-equals": "^5.0.1",
             "lodash-es": "^4.17.21",
             "mobx": "^6.11.0",
-            "react": "0.0.0-experimental-8039e6d0b-20231026"
+            "react": "0.0.0-experimental-6c7b41da3-20231123"
       },
       "devDependencies": {
-            "@rspack/cli": "^0.3.14",
+            "@rspack/cli": "^0.4.0",
             "@types/fs-extra": "^11.0.4",
             "@types/lodash-es": "^4.17.12",
-            "@types/node": "^20.9.4",
+            "@types/node": "^20.10.0",
             "@types/react": "^18.2.38",
             "bun": "^1.0.14",
             "bun-types": "^1.0.14",
