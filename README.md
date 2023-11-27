@@ -1,3 +1,3 @@
 # STK
 
-Shared tookkit for react.
+Shared toolkit for web app.

@@ -17,7 +17,7 @@
             "./README.md"
       ],
       "scripts": {
-            "dev": "bun build ./src/index.ts --outdir ./dist --watch",
+            "dev": "wait bun...",
             "build": "bun run bun.config.ts && tsc"
       },
       "keywords": [
