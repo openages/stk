@@ -1,7 +1,7 @@
 {
       "name": "@openages/stk",
       "version": "1.0.0",
-      "description": "Shared tookkit for react.",
+      "description": "Shared tookkit for web apps.",
       "author": "Whatreal",
       "license": "MIT",
       "homepage": "https://github.com/openages/stk",
@@ -35,7 +35,6 @@
             "react": "0.0.0-experimental-6c7b41da3-20231123"
       },
       "devDependencies": {
-            "@rspack/cli": "^0.4.1",
             "@types/fs-extra": "^11.0.4",
             "@types/lodash-es": "^4.17.12",
             "@types/node": "^20.10.0",

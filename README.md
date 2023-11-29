@@ -1,3 +1,3 @@
 # STK
 
-Shared toolkit for web app.
+Shared toolkit for web apps.
