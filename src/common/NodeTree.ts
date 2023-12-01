@@ -125,7 +125,7 @@ export default class Index {
 			}
 		}
 
-		const all_effect_items = flatten(execs.map((func) => func()))
+		const all_effect_items = flatten(execs.map(func => func()))
 
 		return { effect_items: this.getUniqEffectItems(all_effect_items) }
 	}
@@ -179,7 +179,7 @@ export default class Index {
 	private getRawTreeMap(raw_nodes: RawNodes) {
 		const tree_map = {} as TreeMap
 
-		raw_nodes.map((item) => {
+		raw_nodes.map(item => {
 			tree_map[item.id] = item
 		})
 
@@ -189,7 +189,7 @@ export default class Index {
 	private getTree(raw_nodes: RawNodes, tree_map: TreeMap) {
 		const tree = [] as Tree
 
-		raw_nodes.forEach((item) => {
+		raw_nodes.forEach(item => {
 			if (item.pid) {
 				if (!tree_map[item.pid].children) {
 					tree_map[item.pid].children = []
@@ -210,7 +210,7 @@ export default class Index {
 
 	private sortTree(tree: Tree, tree_map: TreeMap) {
 		const target_tree = [] as Tree
-		const start_node = find(tree, (item) => !item.prev_id)
+		const start_node = find(tree, item => !item.prev_id)
 
 		if (!start_node) return []
 
@@ -316,7 +316,7 @@ export default class Index {
 		return reduceRight(
 			effect_items,
 			(acc, curr) => {
-				if (!acc.some((item) => item['id'] === curr['id'])) {
+				if (!acc.some(item => item['id'] === curr['id'])) {
 					acc.unshift(curr)
 				}
 

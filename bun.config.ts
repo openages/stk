@@ -5,5 +5,5 @@ Bun.build({
 	outdir: './dist',
 	target: 'browser',
 	external: ['react', 'fast-equals', 'ahooks', 'mobx', 'lodash-es'],
-	minify: false
+	minify: true
 })

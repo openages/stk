@@ -6,7 +6,7 @@ import type { DependencyList, useEffect, useLayoutEffect } from 'react'
 type EffectHookType = typeof useEffect | typeof useLayoutEffect
 type CreateUpdateEffect = (hook: EffectHookType) => EffectHookType
 
-const createDeepCompareEffect: CreateUpdateEffect = (hook) => (effect, deps) => {
+const createDeepCompareEffect: CreateUpdateEffect = hook => (effect, deps) => {
 	const ref = useRef<DependencyList>()
 	const signalRef = useRef<number>(0)
 

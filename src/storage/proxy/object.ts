@@ -15,7 +15,7 @@ function createInstrumentations() {
 	const instrumentations: Record<string, Function> = {}
 
 	// instrument length-altering mutation methods to track length
-	;(['push', 'pop', 'shift', 'unshift', 'splice'] as const).forEach((key) => {
+	;(['push', 'pop', 'shift', 'unshift', 'splice'] as const).forEach(key => {
 		instrumentations[key] = function (this: unknown[], ...args: unknown[]) {
 			lengthAltering = true
 			const oldLength: number = this.length
@@ -56,8 +56,7 @@ function set(target: object, key: string, value: unknown, receiver: object) {
 		arrayLength = target.length
 	}
 	const oldValue = target[key]
-	const hadKey =
-		isArray(target) && isIntegerKey(key) ? Number(key) < target.length : hasOwn(target, key)
+	const hadKey = isArray(target) && isIntegerKey(key) ? Number(key) < target.length : hasOwn(target, key)
 
 	const result = Reflect.set(target, key, value, receiver)
 	if (result && hasChanged(value, oldValue)) {

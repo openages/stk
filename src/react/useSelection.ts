@@ -9,10 +9,10 @@ export default () => {
 	useEventListener(
 		'mouseup',
 		() => {
-                  const selection = window.getSelection()
-                  
-                  if (!selection) return
-                  
+			const selection = window.getSelection()
+
+			if (!selection) return
+
 			const text = selection.toString()
 
 			if (!text.length) return

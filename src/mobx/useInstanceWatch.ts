@@ -11,7 +11,7 @@ export default (instance: any) => {
 	const reactions = {} as Listener
 	const observes = {} as Listener
 
-	Object.keys(watch).map((item) => {
+	Object.keys(watch).map(item => {
 		if (item.indexOf('.') !== -1) {
 			reactions[item] = watch[item]
 		} else {
@@ -19,7 +19,7 @@ export default (instance: any) => {
 		}
 	})
 
-	const reactions_disposers = Object.keys(reactions).map((key) => {
+	const reactions_disposers = Object.keys(reactions).map(key => {
 		return reaction(
 			() => get(instance, key),
 			(new_value, old_value) => {
@@ -35,7 +35,7 @@ export default (instance: any) => {
 
 	const observes_disposer = observe(instance, (change: IValueDidChange & { name: string }) => {
 		const { name, newValue, oldValue } = change
-		const multiple_props = Object.keys(observes).find((item) => item.indexOf(name) !== -1 && item !== name)
+		const multiple_props = Object.keys(observes).find(item => item.indexOf(name) !== -1 && item !== name)
 
 		if (multiple_props) {
 			if (multiple_props.indexOf('|') !== -1) {

@@ -23,7 +23,7 @@ const getKey = (key_map: KeyMap) => {
 }
 
 export default (keys: Array<KeyMap>, instance: any) => {
-	keys.map((key) => {
+	keys.map(key => {
 		const target = getKey(key)
 		const local_value = local.getItem(target.local_key)
 
@@ -37,7 +37,7 @@ export default (keys: Array<KeyMap>, instance: any) => {
 	})
 
 	return observe(instance, ({ name, newValue }: IValueDidChange & { name: string }) => {
-		keys.map((key) => {
+		keys.map(key => {
 			if (name === getKey(key).proxy_key) {
 				local.setItem(getKey(key).local_key, newValue)
 			}

@@ -7,8 +7,7 @@ import { decode, encode } from './transform'
 
 function createInstrumentations(target: object, receiver: any) {
 	const instrumentations: Record<string, Function> = {}
-
-	;(['clear', 'key'] as const).forEach((key) => {
+	;(['clear', 'key'] as const).forEach(key => {
 		instrumentations[key] = target[key].bind(target)
 	})
 
@@ -19,7 +18,7 @@ function createInstrumentations(target: object, receiver: any) {
 		removeExpires
 	}
 
-	Object.keys(needReceiverFuncMap).forEach((key) => {
+	Object.keys(needReceiverFuncMap).forEach(key => {
 		instrumentations[key] = function (...args: unknown[]) {
 			return needReceiverFuncMap[key](target, ...args, receiver)
 		}
@@ -32,7 +31,7 @@ function createInstrumentations(target: object, receiver: any) {
 		on,
 		once
 	}
-	Object.keys(notNeedReceiverFuncMap).forEach((key) => {
+	Object.keys(notNeedReceiverFuncMap).forEach(key => {
 		instrumentations[key] = function (...args: unknown[]) {
 			return notNeedReceiverFuncMap[key](target, ...args)
 		}

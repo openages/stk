@@ -43,9 +43,7 @@ export function off(target: object, key?: string, fn?: EffectFn) {
 		if (effects && effects.length > 0) {
 			let value: Effect[] = []
 			if (fn) {
-				value = effects.filter(
-					(ele) => !(ele.fn === fn || (ele as any).fn?.fn === fn)
-				)
+				value = effects.filter(ele => !(ele.fn === fn || (ele as any).fn?.fn === fn))
 			}
 			effectMap.set(key, value)
 		}
@@ -58,7 +56,7 @@ export function emit(target: object, key: string, ...args: any[]) {
 		const effects: Effect[] | undefined = effectMap.get(key)
 		if (effects) {
 			const [value, oldValue] = args
-			effects.forEach((ele) => ele.fn.call(ele.ctx, value, oldValue))
+			effects.forEach(ele => ele.fn.call(ele.ctx, value, oldValue))
 		}
 	}
 }

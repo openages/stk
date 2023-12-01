@@ -109,7 +109,7 @@ function iterator(instance: any, eventNames?: Array<EventName>) {
 					return this.next()
 				}
 
-				await new Promise((resolve) => {
+				await new Promise(resolve => {
 					flush = resolve
 				})
 
@@ -308,8 +308,8 @@ export default class Emittery<EventData = Record<EventName, any>, AllEventData =
 	): EmitteryOncePromise<AllEventData[Name]> {
 		let off_: () => void
 
-		const promise = new Promise((resolve) => {
-			off_ = this.on(eventNames, (data) => {
+		const promise = new Promise(resolve => {
+			off_ = this.on(eventNames, data => {
 				off_()
 				resolve(data)
 			})
@@ -349,12 +349,12 @@ export default class Emittery<EventData = Record<EventName, any>, AllEventData =
 		await resolvedPromise
 
 		const res = await Promise.all([
-			...staticListeners.map(async (listener) => {
+			...staticListeners.map(async listener => {
 				if (listeners.has(listener)) {
 					return listener(eventData)
 				}
 			}),
-			...staticAnyListeners.map(async (listener) => {
+			...staticAnyListeners.map(async listener => {
 				if (anyListeners.has(listener)) {
 					return listener(eventName, eventData)
 				}
@@ -515,7 +515,7 @@ export default class Emittery<EventData = Record<EventName, any>, AllEventData =
 	}
 }
 
-const allEmitteryMethods = Object.getOwnPropertyNames(Emittery.prototype).filter((v) => v !== 'constructor')
+const allEmitteryMethods = Object.getOwnPropertyNames(Emittery.prototype).filter(v => v !== 'constructor')
 
 Object.defineProperty(Emittery, 'listenerAdded', {
 	value: listenerAdded,
