@@ -1,18 +1,18 @@
-import { get, flatMap, last, initial, find, reduceRight, flatten } from 'lodash-es'
+import { find, flatMap, flatten, get, initial, last, reduceRight } from 'lodash-es'
 import { makeAutoObservable, toJS } from 'mobx'
 
-type RawNode = {
+type RawNode<T = {}> = {
 	id: string
 	pid?: string
 	prev_id?: string
 	next_id?: string
 	[key: string]: any
-}
+} & T
 
-type RawNodes = Array<RawNode>
-type TreeItem = RawNode & { children?: Tree }
-type Tree = Array<TreeItem>
-type TreeMap = Record<string, TreeItem>
+type RawNodes<T = {}> = Array<RawNode<T>>
+type TreeItem<T = {}> = RawNode<T> & { children?: Tree<T> }
+type Tree<T = {}> = Array<TreeItem<T>>
+type TreeMap<T = {}> = Record<string, TreeItem<T>>
 
 type ArgsMove = {
 	active_parent_index: Array<number>
@@ -20,54 +20,60 @@ type ArgsMove = {
 	droppable: boolean
 }
 
-type ArgsPlace = {
+type ArgsPlace<T = {}> = {
 	type: 'push' | 'insert'
-	active_item: RawNode
-	over_item?: RawNode
-	target_level: RawNodes
+	active_item: RawNode<T>
+	over_item?: RawNode<T>
+	target_level: RawNodes<T>
 	over_index?: number
 }
 
-export default class Index {
-	tree = [] as Tree
+export default class Index<T = {}> {
+	tree = [] as Tree<T>
 
 	constructor() {
 		makeAutoObservable(this, null, { autoBind: true })
 	}
 
-	public init(raw_nodes: RawNodes) {
+	public init(raw_nodes: RawNodes<T>) {
 		const raw_tree_map = this.getRawTreeMap(raw_nodes)
 		const { tree, tree_map } = this.getTree(raw_nodes, raw_tree_map)
 
 		this.tree = this.sortTree(tree, tree_map)
 	}
 
-	public insert(item: RawNode, focusing_index?: Array<number>) {
-		const { target_level, cloned_item: over_item } = this.getDroppableItem(focusing_index)
+	public insert(item: RawNode<T>, options?: { focusing_index?: Array<number>; droppable?: boolean }) {
+		const { target_level, cloned_item: over_item } = options?.droppable
+			? this.getDroppableItem(options?.focusing_index)
+			: this.getItem(options?.focusing_index)
 
 		const { active_item, effect_items } = this.place({
-			type: 'push',
+			type: options?.droppable ? 'push' : 'insert',
 			active_item: item,
 			over_item,
 			target_level
 		})
 
-		return { item: active_item, effect_items }
+		return { item: active_item, effect_items: effect_items }
 	}
 
-	public remove(focusing_index: Array<number>) {
+	public remove(focusing_index: Array<number>, ignore_children?: boolean) {
 		const { cloned_item, effect_items } = this.take(focusing_index)
 
-		let remove_items = [] as Tree
+		let remove_items = [] as Tree<T>
 
-		if (cloned_item?.children?.length) {
+		if (!ignore_children && cloned_item?.children?.length) {
 			remove_items = this.getherItems(cloned_item.children)
 		}
 
-		return { id: cloned_item.id, remove_items, effect_items }
+		return {
+			id: cloned_item.id,
+			remove_items: remove_items,
+			effect_items: effect_items
+		}
 	}
 
-	public update(focusing_index: Array<number>, data: Omit<RawNode, 'id'>) {
+	public update(focusing_index: Array<number>, data: Omit<RawNode<T>, 'id'>) {
 		const { item, target_level, target_index } = this.getItem(focusing_index)
 		const target = { ...item, ...data }
 
@@ -78,7 +84,7 @@ export default class Index {
 
 	public move(args: ArgsMove) {
 		const { active_parent_index, over_parent_index, droppable } = args
-		const effect_items = [] as RawNodes
+		const effect_items = [] as RawNodes<T>
 
 		const { cloned_item: active_item } = this.getItem(active_parent_index)
 		const { cloned_item: over_item, target_level } = droppable
@@ -131,9 +137,9 @@ export default class Index {
 	}
 
 	public getItem(indexes: Array<number>) {
-		let target_level = [] as Array<TreeItem>
+		let target_level = [] as Array<TreeItem<T>>
 		let target_index = 0
-		let target_item = null as TreeItem
+		let target_item = null as TreeItem<T>
 
 		const target_indexes = this.getIndexes(indexes)
 		const level_indexes = initial(target_indexes)
@@ -158,7 +164,7 @@ export default class Index {
 	private getDroppableItem(indexes: Array<number>) {
 		if (!indexes.length) return { target_level: this.tree, cloned_item: null }
 
-		let target_item = null as TreeItem
+		let target_item = null as TreeItem<T>
 		let target_indexes = [] as Array<number | string>
 
 		if (indexes.length === 1) {
@@ -176,8 +182,8 @@ export default class Index {
 		return { target_level: target_item.children, cloned_item: toJS(target_item) }
 	}
 
-	private getRawTreeMap(raw_nodes: RawNodes) {
-		const tree_map = {} as TreeMap
+	private getRawTreeMap(raw_nodes: RawNodes<T>) {
+		const tree_map = {} as TreeMap<T>
 
 		raw_nodes.map(item => {
 			tree_map[item.id] = item
@@ -186,8 +192,8 @@ export default class Index {
 		return tree_map
 	}
 
-	private getTree(raw_nodes: RawNodes, tree_map: TreeMap) {
-		const tree = [] as Tree
+	private getTree(raw_nodes: RawNodes<T>, tree_map: TreeMap<T>) {
+		const tree = [] as Tree<T>
 
 		raw_nodes.forEach(item => {
 			if (item.pid) {
@@ -208,8 +214,8 @@ export default class Index {
 		return { tree, tree_map }
 	}
 
-	private sortTree(tree: Tree, tree_map: TreeMap) {
-		const target_tree = [] as Tree
+	private sortTree(tree: Tree<T>, tree_map: TreeMap<T>) {
+		const target_tree = [] as Tree<T>
 		const start_node = find(tree, item => !item.prev_id)
 
 		if (!start_node) return []
@@ -228,12 +234,12 @@ export default class Index {
 			current = item.next_id
 		}
 
-		return target_tree
+		return target_tree as Tree<T>
 	}
 
 	private take(indexes: Array<number>, swap?: boolean) {
 		const { cloned_item, target_level, target_index } = this.getItem(indexes)
-		const effect_items = [] as Array<TreeItem>
+		const effect_items = [] as Array<TreeItem<T>>
 
 		if (cloned_item.prev_id) {
 			const prev_item = target_level[target_index - 1]
@@ -258,9 +264,9 @@ export default class Index {
 		return { cloned_item, effect_items }
 	}
 
-	private place(args: ArgsPlace) {
+	private place(args: ArgsPlace<T>) {
 		const { type, active_item, over_item, target_level, over_index } = args
-		const effect_items = [] as RawNodes
+		const effect_items = [] as RawNodes<T>
 
 		if (type === 'push') {
 			active_item.pid = over_item ? over_item.id : ''
@@ -312,7 +318,7 @@ export default class Index {
 		return { active_item, effect_items }
 	}
 
-	private getUniqEffectItems(effect_items: Tree) {
+	private getUniqEffectItems(effect_items: Tree<T>) {
 		return reduceRight(
 			effect_items,
 			(acc, curr) => {
@@ -322,7 +328,7 @@ export default class Index {
 
 				return acc
 			},
-			[] as Tree
+			[] as Tree<T>
 		)
 	}
 
@@ -332,15 +338,18 @@ export default class Index {
 		})
 	}
 
-	private getherItems(tree: Tree) {
-		return tree.reduce((total, item) => {
-			total.push(item)
+	private getherItems(tree: Tree<T>) {
+		return tree.reduce(
+			(total, item) => {
+				total.push(item)
 
-			if (item?.children?.length) {
-				total.push(...this.getherItems(item.children))
-			}
+				if (item?.children?.length) {
+					total.push(...this.getherItems(item.children))
+				}
 
-			return total
-		}, [] as Tree)
+				return total
+			},
+			[] as Tree<T>
+		)
 	}
 }
