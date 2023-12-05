@@ -1,1 +1,1 @@
-export { default as NodeTree, RawNode, TreeItem } from './NodeTree'
+export { default as DirTree, RawNode as DirTreeRawNode, TreeItem as DirTreeTreeItem } from './DirTree'

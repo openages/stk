@@ -1,6 +1,6 @@
 import Emittery from './emittery'
 
-export { NodeTree } from './common'
+export { DirTree } from './common'
 export { Emittery }
 export { local, session, setPrefix, encode, decode } from './storage'
 export { setStorageWhenChange, useInstanceWatch } from './mobx'
@@ -17,4 +17,4 @@ export {
 	useDeepUpdateEffect
 } from './react'
 
-export type { RawNode, TreeItem } from './common'
+export type { DirTreeRawNode, DirTreeTreeItem } from './common'

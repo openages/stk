@@ -42,35 +42,29 @@ export default class Index<T = {}> {
 		this.tree = this.sortTree(tree, tree_map)
 	}
 
-	public insert(item: RawNode<T>, options?: { focusing_index?: Array<number>; droppable?: boolean }) {
-		const { target_level, cloned_item: over_item } = options?.droppable
-			? this.getDroppableItem(options?.focusing_index)
-			: this.getItem(options?.focusing_index)
+	public insert(item: RawNode<T>, focusing_index?: Array<number>) {
+		const { target_level, cloned_item: over_item } = this.getDroppableItem(focusing_index)
 
 		const { active_item, effect_items } = this.place({
-			type: options?.droppable ? 'push' : 'insert',
+			type: 'push',
 			active_item: item,
 			over_item,
 			target_level
 		})
 
-		return { item: active_item, effect_items: effect_items }
+		return { item: active_item, effect_items }
 	}
 
-	public remove(focusing_index: Array<number>, ignore_children?: boolean) {
+	public remove(focusing_index: Array<number>) {
 		const { cloned_item, effect_items } = this.take(focusing_index)
 
 		let remove_items = [] as Tree<T>
 
-		if (!ignore_children && cloned_item?.children?.length) {
+		if (cloned_item?.children?.length) {
 			remove_items = this.getherItems(cloned_item.children)
 		}
 
-		return {
-			id: cloned_item.id,
-			remove_items: remove_items,
-			effect_items: effect_items
-		}
+		return { id: cloned_item.id, remove_items, effect_items }
 	}
 
 	public update(focusing_index: Array<number>, data: Omit<RawNode<T>, 'id'>) {
