@@ -1,7 +1,7 @@
 import { find, flatMap, flatten, get, initial, last, reduceRight } from 'lodash-es'
 import { makeAutoObservable, toJS } from 'mobx'
 
-type RawNode<T = {}> = {
+export type RawNode<T = {}> = {
 	id: string
 	pid?: string
 	prev_id?: string
@@ -10,7 +10,7 @@ type RawNode<T = {}> = {
 } & T
 
 type RawNodes<T = {}> = Array<RawNode<T>>
-type TreeItem<T = {}> = RawNode<T> & { children?: Tree<T> }
+export type TreeItem<T = {}> = RawNode<T> & { children?: Tree<T> }
 type Tree<T = {}> = Array<TreeItem<T>>
 type TreeMap<T = {}> = Record<string, TreeItem<T>>
 

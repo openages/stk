@@ -16,3 +16,5 @@ export {
 	useSelection,
 	useDeepUpdateEffect
 } from './react'
+
+export type { RawNode, TreeItem } from './common'
