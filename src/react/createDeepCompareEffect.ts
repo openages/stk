@@ -1,7 +1,7 @@
 import { deepEqual } from 'fast-equals'
-import { useRef } from 'react'
+import { useEffect, useLayoutEffect, useRef } from 'react'
 
-import type { DependencyList, useEffect, useLayoutEffect } from 'react'
+import type { DependencyList } from 'react'
 
 type EffectHookType = typeof useEffect | typeof useLayoutEffect
 type CreateUpdateEffect = (hook: EffectHookType) => EffectHookType
