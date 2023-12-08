@@ -42,7 +42,7 @@ export default (instance: any) => {
 				const match_keys = multiple_props.split('|')
 
 				if (match_keys.includes(name)) {
-					watch[multiple_props]()
+					watch[multiple_props](match_keys.map(key => get(instance, key)))
 				}
 			}
 		} else {
