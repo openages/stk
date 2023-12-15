@@ -1,4 +1,4 @@
-import { find, flatMap, flatten, get, initial, last, reduceRight } from 'lodash-es'
+import { find, flatMap, flatten, get, initial, last, omit, reduceRight } from 'lodash-es'
 import { makeAutoObservable, toJS } from 'mobx'
 
 export type RawNode<T = {}> = {
@@ -42,6 +42,22 @@ export default class Index<T = {}> {
 		this.tree = this.sortTree(tree, tree_map)
 	}
 
+	public find(id: string, _tree?: Tree<T>): TreeItem<T> {
+		const tree = _tree || this.tree
+
+		for (let index = 0; index < tree.length; index++) {
+			const tree_item = tree[index]
+
+			if (tree_item.id === id) {
+				return tree_item
+			}
+
+			if (tree_item.children) {
+				return this.find(id, tree_item.children)
+			}
+		}
+	}
+
 	public insert(item: RawNode<T>, focusing_index?: Array<number>) {
 		const { target_level, cloned_item: over_item } = this.getDroppableItem(focusing_index)
 
@@ -68,6 +84,18 @@ export default class Index<T = {}> {
 	}
 
 	public update(focusing_index: Array<number>, data: Omit<RawNode<T>, 'id'>) {
+		if (!focusing_index.length) {
+			const target = this.find(data.id)
+
+			if (!target) return
+
+			Object.keys(omit(data, 'id')).forEach((key: keyof typeof data) => {
+				target[key] = data[key]
+			})
+
+			return
+		}
+
 		const { item, target_level, target_index } = this.getItem(focusing_index)
 		const target = { ...item, ...data }
 
