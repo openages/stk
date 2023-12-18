@@ -10,8 +10,15 @@ export default (instance: any) => {
 	const watch = instance.watch
 	const reactions = {} as Listener
 	const observes = {} as Listener
+	const multiple_keys = [] as Array<{ key: string; raw: string }>
 
 	Object.keys(watch).map(item => {
+		if (item.indexOf('|') !== -1) {
+			const targets = item.split('|')
+
+			multiple_keys.push(...targets.map(it => ({ key: it, raw: item })))
+		}
+
 		if (item.indexOf('.') !== -1) {
 			reactions[item] = watch[item]
 		} else {
@@ -35,24 +42,25 @@ export default (instance: any) => {
 
 	const observes_disposer = observe(instance, (change: IValueDidChange & { name: string }) => {
 		const { name, newValue, oldValue } = change
-		const multiple_props = Object.keys(observes).find(item => item.indexOf(name) !== -1 && item !== name)
 
-		if (multiple_props) {
-			if (multiple_props.indexOf('|') !== -1) {
-				const match_keys = multiple_props.split('|')
+		const multiple_target = multiple_keys.find(item => {
+			if (item.key === name) return item
+		})
 
-				if (match_keys.includes(name)) {
-					watch[multiple_props](match_keys.map(key => get(instance, key)))
-				}
+		if (multiple_target) {
+			const match_keys = multiple_target.raw.split('|')
+
+			if (match_keys.includes(name)) {
+				watch[multiple_target.raw](match_keys.map(key => get(instance, key)))
 			}
-		} else {
-			if (watch[name]) {
-				const new_v = toJS(newValue)
-				const old_v = toJS(oldValue)
+		}
 
-				if (!deepEqual(new_v, old_v)) {
-					watch[name](new_v, old_v)
-				}
+		if (watch[name]) {
+			const new_v = toJS(newValue)
+			const old_v = toJS(oldValue)
+
+			if (!deepEqual(new_v, old_v)) {
+				watch[name](new_v, old_v)
 			}
 		}
 	})
