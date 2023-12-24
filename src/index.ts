@@ -6,6 +6,8 @@ export { local, session, setPrefix, encode, decode } from './storage'
 export { setStorageWhenChange, useInstanceWatch } from './mobx'
 export { Watch } from './mobx'
 
+export { updateSort } from './dnd'
+
 export {
 	handle,
 	memo,
