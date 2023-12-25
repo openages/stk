@@ -9,9 +9,42 @@
 		"type": "git",
 		"url": "git+https://github.com/openages/stk.git"
 	},
-	"main": "dist/index.js",
-	"types": "dist/index.d.ts",
+	"sideEffects": false,
 	"files": ["./dist", "./package.json", "./README.md"],
+	"exports": {
+		"./package.json": "./package.json",
+		"./common": {
+			"types": "./dist/common/index.d.ts",
+			"require": "./dist/common/index.js",
+			"import": "./dist/common/index.js",
+			"default": "./dist/common/index.js"
+		},
+		"./dnd": {
+			"types": "./dist/dnd/index.d.ts",
+			"import": "./dist/dnd/index.js",
+			"default": "./dist/dnd/index.js"
+		},
+		"./emittery": {
+			"types": "./dist/emittery/index.d.ts",
+			"import": "./dist/emittery/index.js",
+			"default": "./dist/emittery/index.js"
+		},
+		"./mobx": {
+			"types": "./dist/mobx/index.d.ts",
+			"import": "./dist/mobx/index.js",
+			"default": "./dist/mobx/index.js"
+		},
+		"./react": {
+			"types": "./dist/react/index.d.ts",
+			"import": "./dist/react/index.js",
+			"default": "./dist/react/index.js"
+		},
+		"./storage": {
+			"types": "./dist/storage/index.d.ts",
+			"import": "./dist/storage/index.js",
+			"default": "./dist/storage/index.js"
+		}
+	},
 	"scripts": {
 		"dev": "wait bun...",
 		"build": "bun run bun.config.ts && tsc"
@@ -22,7 +55,6 @@
 		"fast-equals": "^5.0.1",
 		"lodash-es": "^4.17.21",
 		"mobx": "^6.12.0",
-		"mobx-utils": "^6.0.8",
 		"react": "0.0.0-experimental-c29ca23af-20231205"
 	},
 	"devDependencies": {
