@@ -18,6 +18,10 @@ export default <T>(arr: Array<T>, index: number, sort_key?: string): { item: T; 
 		sort_value = prev_item[sort] + 1
 	}
 
+	if (!prev_item && !next_item) {
+		sort_value = 1
+	}
+
 	arr[index][sort] = sort_value
 
 	return { item: arr[index], sort: sort_value }
