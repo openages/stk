@@ -1,10 +1,14 @@
 import { observe, set } from 'mobx'
 
-import { local } from '../storage'
+import { local, session } from '../storage'
 
 import type { IValueDidChange } from 'mobx'
 
 type KeyMap = Record<string, string | ((v: any) => any)> | string
+
+interface Options {
+	useSession?: boolean
+}
 
 const getKey = (key_map: KeyMap) => {
 	if (typeof key_map === 'string') {
@@ -22,10 +26,12 @@ const getKey = (key_map: KeyMap) => {
 	}
 }
 
-export default (keys: Array<KeyMap>, instance: any) => {
+export default (keys: Array<KeyMap>, instance: any, options?: Options) => {
+	const storage = options?.useSession ? session : local
+
 	keys.map(key => {
 		const target = getKey(key)
-		const local_value = local.getItem(target.local_key)
+		const local_value = storage.getItem(target.local_key)
 
 		if (local_value) {
 			if (target.getHandler) {
@@ -39,7 +45,7 @@ export default (keys: Array<KeyMap>, instance: any) => {
 	return observe(instance, ({ name, newValue }: IValueDidChange & { name: string }) => {
 		keys.map(key => {
 			if (name === getKey(key).proxy_key) {
-				local.setItem(getKey(key).local_key, newValue)
+				storage.setItem(getKey(key).local_key, newValue)
 			}
 		})
 	})
