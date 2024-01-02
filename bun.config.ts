@@ -6,7 +6,7 @@ Bun.build({
 	entrypoints: modules.map(item => `./src/${item}/index.ts`),
 	outdir: './dist',
 	target: 'browser',
-	external: ['react', 'fast-equals', 'ahooks', 'mobx', 'lodash-es'],
+	external: ['react', 'react-dom', 'fast-equals', 'ahooks', 'mobx', 'lodash-es', 'scheduler'],
 	minify: true,
 	splitting: true,
 	format: 'esm',
