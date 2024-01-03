@@ -10,13 +10,8 @@
 		"url": "git+https://github.com/openages/stk.git"
 	},
 	"sideEffects": false,
-	"files": [
-		"./dist",
-		"./package.json",
-		"./README.md"
-	],
+	"files": ["./dist", "./package.json", "./README.md"],
 	"exports": {
-		"./package.json": "./package.json",
 		"./common": {
 			"types": "./dist/common/index.d.ts",
 			"require": "./dist/common/index.js",
@@ -51,15 +46,9 @@
 	},
 	"scripts": {
 		"dev": "wait bun...",
-		"build": "bun run bun.config.ts && tsc"
+		"build": "bun run bun.config.ts && bun run ./node_modules/typescript/lib/tsc.js"
 	},
-	"keywords": [
-		"react",
-		"nodejs",
-		"web",
-		"utils",
-		"typescript"
-	],
+	"keywords": ["react", "nodejs", "web", "utils", "typescript"],
 	"dependencies": {
 		"ahooks": "^3.7.8",
 		"fast-equals": "^5.0.1",
