@@ -7,16 +7,15 @@ import {
 	useReducer,
 	useRef,
 	useState,
-	ComponentType,
 	Context as ContextOrig,
-	MutableRefObject,
-	Provider,
-	ReactNode
+	Provider
 } from 'react'
 import { unstable_batchedUpdates as batchedUpdates } from 'react-dom'
 import { unstable_runWithPriority as runWithPriority, unstable_NormalPriority as NormalPriority } from 'scheduler'
 
 import memo from './memo'
+
+import type { ReactNode, MutableRefObject, ComponentType } from 'react'
 
 const CONTEXT_VALUE = Symbol()
 const ORIGINAL_PROVIDER = Symbol()
