@@ -10,7 +10,11 @@
 		"url": "git+https://github.com/openages/stk.git"
 	},
 	"sideEffects": false,
-	"files": ["./dist", "./package.json", "./README.md"],
+	"files": [
+		"./dist",
+		"./package.json",
+		"./README.md"
+	],
 	"exports": {
 		"./common": {
 			"types": "./dist/common/index.d.ts",
@@ -48,25 +52,31 @@
 		"dev": "wait bun...",
 		"build": "bun bun.config.ts && bun ./node_modules/typescript/lib/tsc.js"
 	},
-	"keywords": ["react", "nodejs", "web", "utils", "typescript"],
+	"keywords": [
+		"react",
+		"nodejs",
+		"web",
+		"utils",
+		"typescript"
+	],
 	"dependencies": {
 		"ahooks": "^3.7.8",
 		"fast-equals": "^5.0.1",
 		"lodash-es": "^4.17.21",
 		"mobx": "^6.12.0",
-		"react": "0.0.0-experimental-c5b937576-20231219",
-		"react-dom": "0.0.0-experimental-c5b937576-20231219",
+		"react": "0.0.0-experimental-31603f19d-20240109",
+		"react-dom": "0.0.0-experimental-31603f19d-20240109",
 		"scheduler": "^0.23.0"
 	},
 	"devDependencies": {
 		"@types/fs-extra": "^11.0.4",
 		"@types/lodash-es": "^4.17.12",
-		"@types/node": "^20.10.6",
+		"@types/node": "^20.10.8",
 		"@types/react": "18.2.42",
 		"@types/react-dom": "^18.2.18",
 		"@types/scheduler": "^0.16.8",
-		"bun": "^1.0.21",
-		"bun-types": "^1.0.21",
+		"bun": "^1.0.22",
+		"bun-types": "^1.0.22",
 		"fast-glob": "^3.3.2",
 		"fs-extra": "^11.2.0",
 		"ts-node": "^10.9.2",
