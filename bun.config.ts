@@ -1,6 +1,6 @@
 /// <reference types="bun-types" />
 
-const modules = ['common', 'dnd', 'emittery', 'mobx', 'react', 'storage']
+const modules = ['common', 'dnd', 'emittery', 'mobx', 'react', 'storage', 'creep']
 
 Bun.build({
 	entrypoints: modules.map(item => `./src/${item}/index.ts`),
