@@ -1,4 +1,10 @@
 import { debounce } from 'lodash-es'
+import { makeAutoObservable } from 'mobx'
+
+import { useInstanceWatch } from '@/mobx'
+
+import type { IReactionDisposer, Lambda } from 'mobx'
+import type { Watch } from '@/mobx'
 
 const addEventListeners = (object: typeof window | typeof document, events: Array<string>, callback: () => any) => {
 	events.forEach(event => {
@@ -14,123 +20,114 @@ const removeEventListeners = (object: typeof window | typeof document, events: A
 
 type MaybePromise<T> = T | Promise<T>
 
-interface Options<T = {}> {
-	/**
-	 * Context is caller`s this
-	 */
+interface Config<T = {}> {
 	context?: T
-	/**
-	 * Idle time in ms.
-	 *
-	 * @default 60000
-	 */
-	time?: number
-	/**
-	 * Events that will trigger the idle resetter.
-	 *
-	 * @default ['mousemove','scroll','keydown','mousedown','touchstart']
-	 */
 	events?: string[]
-	/**
-	 * Callback function to be executed after idle time.
-	 */
 	onIdle?: () => MaybePromise<any>
-	/**
-	 * Callback function to be executed after back form idleness.
-	 */
 	onActive?: () => MaybePromise<any>
-	/**
-	 * Callback function to be executed when window become hidden.
-	 */
 	onHide?: () => MaybePromise<any>
-	/**
-	 * Callback function to be executed when window become visible.
-	 */
 	onShow?: () => MaybePromise<any>
 }
 
 export default class Index<T = {}> {
-	settings = {
+	config = {
 		context: null,
-		time: 60000,
 		events: ['mousemove', 'scroll', 'keydown', 'mousedown', 'touchstart'],
 		onIdle: null,
 		onActive: null,
 		onHide: null,
 		onShow: null
-	} as Options<T>
+	} as Config<T>
 
+	time = 60000
 	idle = false
 	visible = true
-	clearTimeout = null
+	timer = null
+	acts = [] as Array<IReactionDisposer | Lambda>
 
-	constructor(options: Options<T>) {
-		this.settings = Object.assign(this.settings, options)
+	watch = {
+		time: v => {
+			this.off()
+
+			if (v) this.on()
+		}
+	} as Watch<Index>
+
+	constructor() {
+		makeAutoObservable(this, { config: false, timer: false, acts: false }, { autoBind: true })
+
+		this.acts = [...useInstanceWatch(this)]
 	}
 
-	public start() {
-		this.startTimer()
+	init(time: number, config: Config<T>) {
+		if (!time) return
 
-		addEventListeners(window, this.settings.events, this.active.bind(this))
+		this.time = time
+		this.config = Object.assign(this.config, config)
 
-		if (this.settings.onShow || this.settings.onHide) {
-			addEventListeners(document, ['visibilitychange'], this.show.bind(this))
+		this.on()
+	}
+
+	on() {
+		this.start()
+
+		addEventListeners(window, this.config.events, this.active.bind(this.config.context ?? this))
+
+		if (this.config.onShow || this.config.onHide) {
+			addEventListeners(
+				document,
+				['visibilitychange'],
+				this.changeVisible.bind(this.config.context ?? this)
+			)
 		}
 	}
 
-	public stop() {
-		if (this.clearTimeout) {
-			this.clearTimeout()
+	off() {
+		if (this.timer) clearTimeout(this.timer)
 
-			this.clearTimeout = null
+		this.acts.map(item => item())
+
+		removeEventListeners(window, this.config.events, this.active.bind(this.config.context ?? this))
+
+		if (this.config.onShow || this.config.onHide) {
+			removeEventListeners(
+				document,
+				['visibilitychange'],
+				this.changeVisible.bind(this.config.context ?? this)
+			)
 		}
+	}
 
-		removeEventListeners(window, this.settings.events, this.active.bind(this))
+	private start() {
+		if (this.timer) clearTimeout(this.timer)
 
-		if (this.settings.onShow || this.settings.onHide) {
-			removeEventListeners(document, ['visibilitychange'], this.show.bind(this))
-		}
+		this.timer = setTimeout(() => {
+			this.idle = true
+			this.config.onIdle && this.config.onIdle.call(this.config.context ?? this)
+		}, this.time)
 	}
 
 	private active() {
 		if (this.idle) {
 			this.idle = false
 
-			this.settings.onActive && this.settings.onActive.call(this.settings.context ?? this)
+			this.config.onActive && this.config.onActive.call(this.config.context ?? this)
 		}
 
-		this.resetTimer()
+		this.start()
 	}
 
-	private show() {
+	private changeVisible() {
 		if (document.hidden) {
 			if (this.visible) {
 				this.visible = false
-				this.settings.onHide && this.settings.onHide.call(this.settings.context ?? this)
+				this.config.onHide && this.config.onHide.call(this.config.context ?? this)
 			}
 		} else {
 			if (!this.visible) {
 				this.visible = true
-				this.settings.onShow && this.settings.onShow.call(this.settings.context ?? this)
+				this.config.onShow && this.config.onShow.call(this.config.context ?? this)
 			}
 		}
-	}
-
-	private startTimer() {
-		const timer = setTimeout(() => {
-			this.idle = true
-			this.settings.onIdle && this.settings.onIdle.call(this.settings.context ?? this)
-		}, this.settings.time)
-
-		this.clearTimeout = () => clearTimeout(timer)
-	}
-
-	private resetTimer() {
-		if (this.clearTimeout) {
-			this.clearTimeout()
-			this.clearTimeout = null
-		}
-
-		this.startTimer()
 	}
 }
