@@ -289,7 +289,9 @@ export const getCode = async () => {
 					]
 				})()
 			)
-		]).catch(error => console.error(error.message))
+		]).catch(error => {
+			throw error
+		})
 
 		// console.log(performance.now()-start)
 		const hashTimeEnd = hashStartTime()
