@@ -33,7 +33,7 @@ export type EmitteryOncePromise<T> = {
 export type UnsubscribeFunction = () => void
 
 export type ListenerChangedData = {
-	listener: (eventData?: unknown) => void | Promise<void>
+	listener: (eventData?: unknown) => any | Promise<any>
 
 	eventName?: EventName
 }

@@ -1,4 +1,4 @@
-import { anyMap, producersMap, eventsMap } from './maps'
+import { anyMap, eventsMap, producersMap } from './maps'
 
 import type {
 	EventName,
@@ -249,7 +249,7 @@ export default class Emittery<EventData = Record<EventName, any>, AllEventData =
 
 	on<Name extends keyof AllEventData>(
 		eventNames: Name | readonly Name[],
-		listener: (eventData: AllEventData[Name]) => void | Promise<void>
+		listener: (eventData: AllEventData[Name]) => any | Promise<any>
 	): UnsubscribeFunction {
 		assertListener(listener)
 
@@ -279,7 +279,7 @@ export default class Emittery<EventData = Record<EventName, any>, AllEventData =
 
 	off<Name extends keyof AllEventData>(
 		eventNames: Name | readonly Name[],
-		listener: (eventData: AllEventData[Name]) => void | Promise<void>
+		listener: (eventData: AllEventData[Name]) => any | Promise<any>
 	): void {
 		assertListener(listener)
 
