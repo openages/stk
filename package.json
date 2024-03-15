@@ -47,6 +47,11 @@
 			"types": "./dist/creep/index.d.ts",
 			"import": "./dist/creep/index.js",
 			"default": "./dist/creep/index.js"
+		},
+		"./dom": {
+			"types": "./dist/dom/index.d.ts",
+			"import": "./dist/dom/index.js",
+			"default": "./dist/dom/index.js"
 		}
 	},
 	"scripts": {
