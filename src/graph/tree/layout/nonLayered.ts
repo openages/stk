@@ -91,6 +91,7 @@ function layer(node: Node, isHorizontal: boolean, d = 0) {
 
 export default (root: Node, options = {} as Options) => {
 	const isHorizontal = options.isHorizontal
+	const forceCompact = options.forceCompact
 
 	function firstWalk(t: Node) {
 		if (t.cs === 0) {
@@ -108,7 +109,7 @@ export default (root: Node, options = {} as Options) => {
 
 			const min = bottom(t.c[i].er)
 
-			separate(t, i, ih)
+			separate(t, i, ih, forceCompact)
 
 			ih = updateIYL(min, i, ih)
 		}
@@ -130,7 +131,7 @@ export default (root: Node, options = {} as Options) => {
 		}
 	}
 
-	function separate(t: Node, i: number, ih: Node['ih']) {
+	function separate(t: Node, i: number, ih: Node['ih'], forceCompact: boolean) {
 		let sr = t.c[i - 1]
 		let mssr = sr.mod
 		let cl = t.c[i]
@@ -141,8 +142,9 @@ export default (root: Node, options = {} as Options) => {
 
 			const dist = mssr + sr.prelim + sr.w - (mscl + cl.prelim)
 
-			if (dist > 0) {
+			if (forceCompact || dist > 0) {
 				mscl += dist
+
 				moveSubtree(t, i, ih.index, dist)
 			}
 

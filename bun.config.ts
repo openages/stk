@@ -10,5 +10,6 @@ Bun.build({
 	minify: true,
 	splitting: true,
 	format: 'esm',
-	naming: './[name].[ext]'
+	root: './src'
+	// naming: '[name].[ext]'
 })

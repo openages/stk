@@ -56,6 +56,7 @@ export interface NodeType extends Methods {
 export type Options = typeof DEFAULT_OPTIONS & {
 	direction?: Direction
 	isHorizontal?: boolean
+	forceCompact?: boolean
 	fixedRoot?: boolean
 	indent?: number
 	dropCap?: boolean

@@ -61,7 +61,7 @@
 	},
 	"scripts": {
 		"dev": "wait bun...",
-		"build": "bun bun.config.ts",
+		"build": "bun bun.config.ts && bun ./node_modules/typescript/lib/tsc.js",
 		"build:test": "rspack build"
 	},
 	"keywords": ["react", "nodejs", "web", "utils", "typescript"],

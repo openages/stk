@@ -7,13 +7,14 @@ const positionNode = (
 	previousNode: Node,
 	indent: ((n: Node) => number) | number,
 	dropCap: boolean,
-	align: 'center' | undefined
+	align: 'center' | undefined,
+	root: Node
 ) => {
 	const displacementX = typeof indent === 'function' ? indent(node) : indent * node.depth
 
 	if (!dropCap) {
 		try {
-			if (node.id === node.parent.children[0].id) {
+			if (node.id === node.parent.children[0].id || node.id === root?.children?.[0]?.id) {
 				node.x += displacementX
 				node.y = previousNode ? previousNode.y : 0
 				return
@@ -45,7 +46,7 @@ export default (root: Node, indent: ((n: Node) => number) | number, dropCap: boo
 	let previousNode = null
 
 	root.eachNode(node => {
-		positionNode(node, previousNode, indent, dropCap, align)
+		positionNode(node, previousNode, indent, dropCap, align, root)
 
 		previousNode = node
 	})
