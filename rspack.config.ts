@@ -6,13 +6,15 @@ import { defineConfig } from '@rspack/cli'
 
 const is_prod = process.env.NODE_ENV === 'production'
 
+const name = 'graph'
+
 module.exports = defineConfig({
 	entry: {
-		main: './src/creep/index.ts'
+		main: `./src/${name}/index.ts`
 	},
 	output: {
 		clean: is_prod,
-		path: resolve(__dirname, 'dist/creep')
+		path: resolve(__dirname, `dist/${name}`)
 	},
 	watchOptions: {
 		ignored: /node_modules/
@@ -21,14 +23,20 @@ module.exports = defineConfig({
 		extensions: ['.tsx', '.ts', '.js'],
 		tsConfigPath: resolve(__dirname, 'tsconfig.json')
 	},
-	externals: ['react', 'react-dom', 'fast-equals', 'ahooks', 'mobx', 'lodash-es', 'scheduler', '@swc/helpers'],
+	externals: [
+		'react',
+		'react-dom',
+		'fast-equals',
+		'ahooks',
+		'mobx',
+		'lodash-es',
+		'scheduler',
+		'@swc/helpers',
+		'@antv/util'
+	],
 	experiments: {
-		topLevelAwait: true,
 		outputModule: true,
-		rspackFuture: {
-			// newTreeshaking: true,
-			disableApplyEntryLazily: true
-		}
+		rspackFuture: {}
 	},
 	module: {
 		rules: [
