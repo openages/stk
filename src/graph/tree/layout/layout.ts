@@ -2,7 +2,7 @@ import separateRoot from './separateRoot'
 
 import type { Node, Options } from '../types'
 
-const VALID_DIRECTIONS = ['LR', 'RL', 'TB', 'BT', 'H', 'V']
+const VALID_DIRECTIONS = ['LR', 'RL', 'TB', 'BT', 'H', 'V'] as const
 const HORIZONTAL_DIRECTIONS = ['LR', 'RL', 'H']
 const DEFAULT_DIRECTION = VALID_DIRECTIONS[0]
 

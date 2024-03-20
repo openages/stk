@@ -2,20 +2,20 @@ import { mix } from '@antv/util'
 
 import type { Direction } from '../types'
 
-export type Methods = typeof extend
+export type Methods = Partial<typeof extend>
 
 export interface NodeType extends Methods {
 	id: string
-	name: string
-	label: string
-	preH: number
-	preV: number
-	hgap: number
-	vgap: number
-	width: number
-	height: number
-	x: number
-	y: number
+	name?: string
+	label?: string
+	preH?: number
+	preV?: number
+	hgap?: number
+	vgap?: number
+	width?: number
+	height?: number
+	x?: number
+	y?: number
 	index?: number
 	w?: number
 	h?: number
@@ -53,7 +53,7 @@ export interface NodeType extends Methods {
 	nxt?: NodeType['ih']
 }
 
-export type Options = typeof DEFAULT_OPTIONS & {
+export type Options = Partial<typeof DEFAULT_OPTIONS> & {
 	direction?: Direction
 	isHorizontal?: boolean
 	forceCompact?: boolean
@@ -96,7 +96,7 @@ const DEFAULT_OPTIONS = {
 
 		return d.width || label.split('').length * PEM
 	}
-}
+} as const
 
 function Node(node: NodeType, options: Options) {
 	const me = this
@@ -226,7 +226,7 @@ const extend = {
 mix(Node.prototype, extend)
 
 export const hierarchy = (data: NodeType, options = {} as Options, isolated?: boolean) => {
-	options = mix({} as Options, DEFAULT_OPTIONS, options)
+	options = mix(DEFAULT_OPTIONS, options)
 
 	// @ts-ignore
 	const root = new Node(data, options)
