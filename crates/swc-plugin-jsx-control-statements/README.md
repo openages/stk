@@ -2,6 +2,10 @@
 
 Original idea: [babel-plugin-jsx-control-statements](https://github.com/AlexGilleran/jsx-control-statements)
 
+## Attension
+
+`swc_core` version shuold be align with [rspack](https://github.com/web-infra-dev/rspack/blob/d61d0d443505a2f889d9ca901639c15afcd50686/Cargo.toml#L62)
+
 ## Installation
 
 **pnpm** (recommended):
