@@ -57,11 +57,6 @@
 			"types": "./dist/graph/index.d.ts",
 			"import": "./dist/graph/index.js",
 			"default": "./dist/graph/index.js"
-		},
-		"./swc-plugin-jsx-control-statements": {
-			"types": "./crates/swc-plugin-jsx-control-statements/jsx-control-statements.d.ts",
-			"import": "./crates/swc-plugin-jsx-control-statements/target/wasm32-wasi/release/swc_plugin_jsx_control_statements.wasm",
-			"default": "./crates/swc-plugin-jsx-control-statements/target/wasm32-wasi/release/swc_plugin_jsx_control_statements.wasm"
 		}
 	},
 	"scripts": {
