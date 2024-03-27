@@ -71,25 +71,25 @@
 		"ahooks": "^3.7.10",
 		"fast-equals": "^5.0.1",
 		"lodash-es": "^4.17.21",
-		"mobx": "^6.12.0",
+		"mobx": "^6.12.1",
 		"react": "0.0.0-experimental-14898b6a9-20240318",
 		"react-dom": "0.0.0-experimental-14898b6a9-20240318",
 		"scheduler": "0.0.0-experimental-14898b6a9-20240318"
 	},
 	"devDependencies": {
-		"@rspack/cli": "0.5.8",
-		"@rspack/core": "0.5.8",
+		"@rspack/cli": "0.5.9",
+		"@rspack/core": "0.5.9",
 		"@types/fs-extra": "^11.0.4",
 		"@types/lodash-es": "^4.17.12",
 		"@types/node": "^20.11.30",
 		"@types/react": "18.2.42",
 		"@types/react-dom": "^18.2.22",
 		"@types/scheduler": "^0.16.8",
-		"bun": "^1.0.33",
-		"bun-types": "^1.0.33",
+		"bun": "^1.0.35",
+		"bun-types": "^1.0.35",
 		"fast-glob": "^3.3.2",
 		"fs-extra": "^11.2.0",
 		"ts-node": "^10.9.2",
-		"typescript": "^5.4.2"
+		"typescript": "^5.4.3"
 	}
 }
