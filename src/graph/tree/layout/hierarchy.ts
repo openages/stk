@@ -51,6 +51,7 @@ export interface NodeType extends Methods {
 		nxt: NodeType['ih']
 	}
 	nxt?: NodeType['ih']
+	[key: string]: any
 }
 
 export type Options = Partial<typeof DEFAULT_OPTIONS> & {
