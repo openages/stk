@@ -1,4 +1,4 @@
-import { observe, set } from 'mobx'
+import { get, observe, set } from 'mobx'
 
 import { local, session } from '../storage'
 
@@ -33,12 +33,14 @@ export default (keys: Array<KeyMap>, instance: any, options?: Options) => {
 		const target = getKey(key)
 		const local_value = storage.getItem(target.local_key)
 
-		if (local_value) {
+		if (local_value !== undefined) {
 			if (target.getHandler) {
 				set(instance, target.proxy_key, target.getHandler(local_value))
 			} else {
 				set(instance, target.proxy_key, local_value)
 			}
+		} else {
+			storage.setItem(target.local_key, get(instance, target.proxy_key))
 		}
 	})
 
