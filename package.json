@@ -57,6 +57,11 @@
 			"types": "./dist/graph/index.d.ts",
 			"import": "./dist/graph/index.js",
 			"default": "./dist/graph/index.js"
+		},
+		"./typekit": {
+			"types": "./dist/typekit/index.d.ts",
+			"import": "./dist/typekit/index.js",
+			"default": "./dist/typekit/index.js"
 		}
 	},
 	"scripts": {
