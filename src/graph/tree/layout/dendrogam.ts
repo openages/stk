@@ -1,4 +1,4 @@
-import { mix } from '@antv/util'
+import { mix } from '../util'
 
 import type { Node, Options } from '../types'
 

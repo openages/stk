@@ -23,17 +23,7 @@ module.exports = defineConfig({
 		extensions: ['.tsx', '.ts', '.js'],
 		tsConfigPath: resolve(__dirname, 'tsconfig.json')
 	},
-	externals: [
-		'react',
-		'react-dom',
-		'fast-equals',
-		'ahooks',
-		'mobx',
-		'lodash-es',
-		'scheduler',
-		'@swc/helpers',
-		'@antv/util'
-	],
+	externals: ['react', 'react-dom', 'fast-equals', 'ahooks', 'mobx', 'lodash-es', 'scheduler', '@swc/helpers'],
 	experiments: {
 		outputModule: true,
 		rspackFuture: {}

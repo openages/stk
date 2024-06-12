@@ -1,6 +1,5 @@
-import { mix } from '@antv/util'
-
 import { layout, nonLayered, Tree } from './layout'
+import { mix } from './util'
 
 import type { Node, Options } from './types'
 

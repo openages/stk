@@ -1,110 +1,99 @@
 {
-  "name": "@openages/stk",
-  "version": "1.0.0",
-  "description": "Shared tookkit for web apps.",
-  "author": "Whatreal",
-  "license": "MIT",
-  "homepage": "https://github.com/openages/stk",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/openages/stk.git"
-  },
-  "sideEffects": false,
-  "files": [
-    "./dist",
-    "./package.json",
-    "./README.md"
-  ],
-  "exports": {
-    "./common": {
-      "types": "./dist/common/index.d.ts",
-      "require": "./dist/common/index.js",
-      "import": "./dist/common/index.js",
-      "default": "./dist/common/index.js"
-    },
-    "./dnd": {
-      "types": "./dist/dnd/index.d.ts",
-      "import": "./dist/dnd/index.js",
-      "default": "./dist/dnd/index.js"
-    },
-    "./emittery": {
-      "types": "./dist/emittery/index.d.ts",
-      "import": "./dist/emittery/index.js",
-      "default": "./dist/emittery/index.js"
-    },
-    "./mobx": {
-      "types": "./dist/mobx/index.d.ts",
-      "import": "./dist/mobx/index.js",
-      "default": "./dist/mobx/index.js"
-    },
-    "./react": {
-      "types": "./dist/react/index.d.ts",
-      "import": "./dist/react/index.js",
-      "default": "./dist/react/index.js"
-    },
-    "./storage": {
-      "types": "./dist/storage/index.d.ts",
-      "import": "./dist/storage/index.js",
-      "default": "./dist/storage/index.js"
-    },
-    "./creep": {
-      "types": "./dist/creep/index.d.ts",
-      "import": "./dist/creep/index.js",
-      "default": "./dist/creep/index.js"
-    },
-    "./dom": {
-      "types": "./dist/dom/index.d.ts",
-      "import": "./dist/dom/index.js",
-      "default": "./dist/dom/index.js"
-    },
-    "./graph": {
-      "types": "./dist/graph/index.d.ts",
-      "import": "./dist/graph/index.js",
-      "default": "./dist/graph/index.js"
-    },
-    "./typekit": {
-      "types": "./dist/typekit/index.d.ts",
-      "import": "./dist/typekit/index.js",
-      "default": "./dist/typekit/index.js"
-    }
-  },
-  "scripts": {
-    "dev": "wait bun...",
-    "build": "bun bun.config.ts && bun ./node_modules/typescript/lib/tsc.js",
-    "build:test": "rspack build"
-  },
-  "keywords": [
-    "react",
-    "nodejs",
-    "web",
-    "utils",
-    "typescript"
-  ],
-  "dependencies": {
-    "@antv/util": "^3.3.7",
-    "@swc/helpers": "^0.5.11",
-    "ahooks": "^3.8.0",
-    "fast-equals": "^5.0.1",
-    "lodash-es": "^4.17.21",
-    "mobx": "^6.12.3",
-    "react": "0.0.0-experimental-c3048aab4-20240326",
-    "react-dom": "0.0.0-experimental-c3048aab4-20240326",
-    "scheduler": "0.0.0-experimental-c3048aab4-20240326"
-  },
-  "devDependencies": {
-    "@rspack/cli": "0.6.5",
-    "@rspack/core": "0.6.5",
-    "@types/fs-extra": "^11.0.4",
-    "@types/lodash-es": "^4.17.12",
-    "@types/node": "^20.14.0",
-    "@types/react": "18.2.42",
-    "@types/react-dom": "^18.3.0",
-    "@types/scheduler": "^0.16.8",
-    "bun": "^1.1.12",
-    "bun-types": "^1.1.12",
-    "fast-glob": "^3.3.2",
-    "fs-extra": "^11.2.0",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.4.5"
-  }
+	"name": "@openages/stk",
+	"version": "1.0.0",
+	"description": "Shared tookkit for web apps.",
+	"author": "Whatreal",
+	"license": "MIT",
+	"homepage": "https://github.com/openages/stk",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/openages/stk.git"
+	},
+	"sideEffects": false,
+	"files": ["./dist", "./package.json", "./README.md"],
+	"exports": {
+		"./common": {
+			"types": "./dist/common/index.d.ts",
+			"require": "./dist/common/index.js",
+			"import": "./dist/common/index.js",
+			"default": "./dist/common/index.js"
+		},
+		"./dnd": {
+			"types": "./dist/dnd/index.d.ts",
+			"import": "./dist/dnd/index.js",
+			"default": "./dist/dnd/index.js"
+		},
+		"./emittery": {
+			"types": "./dist/emittery/index.d.ts",
+			"import": "./dist/emittery/index.js",
+			"default": "./dist/emittery/index.js"
+		},
+		"./mobx": {
+			"types": "./dist/mobx/index.d.ts",
+			"import": "./dist/mobx/index.js",
+			"default": "./dist/mobx/index.js"
+		},
+		"./react": {
+			"types": "./dist/react/index.d.ts",
+			"import": "./dist/react/index.js",
+			"default": "./dist/react/index.js"
+		},
+		"./storage": {
+			"types": "./dist/storage/index.d.ts",
+			"import": "./dist/storage/index.js",
+			"default": "./dist/storage/index.js"
+		},
+		"./creep": {
+			"types": "./dist/creep/index.d.ts",
+			"import": "./dist/creep/index.js",
+			"default": "./dist/creep/index.js"
+		},
+		"./dom": {
+			"types": "./dist/dom/index.d.ts",
+			"import": "./dist/dom/index.js",
+			"default": "./dist/dom/index.js"
+		},
+		"./graph": {
+			"types": "./dist/graph/index.d.ts",
+			"import": "./dist/graph/index.js",
+			"default": "./dist/graph/index.js"
+		},
+		"./typekit": {
+			"types": "./dist/typekit/index.d.ts",
+			"import": "./dist/typekit/index.js",
+			"default": "./dist/typekit/index.js"
+		}
+	},
+	"scripts": {
+		"dev": "wait bun...",
+		"build": "bun bun.config.ts && bun ./node_modules/typescript/lib/tsc.js",
+		"build:test": "rspack build"
+	},
+	"keywords": ["react", "nodejs", "web", "utils", "typescript"],
+	"dependencies": {
+		"@swc/helpers": "^0.5.11",
+		"ahooks": "^3.8.0",
+		"fast-equals": "^5.0.1",
+		"lodash-es": "^4.17.21",
+		"mobx": "^6.12.3",
+		"react": "0.0.0-experimental-c3048aab4-20240326",
+		"react-dom": "0.0.0-experimental-c3048aab4-20240326",
+		"scheduler": "0.0.0-experimental-c3048aab4-20240326"
+	},
+	"devDependencies": {
+		"@rspack/cli": "0.6.5",
+		"@rspack/core": "0.6.5",
+		"@types/fs-extra": "^11.0.4",
+		"@types/lodash-es": "^4.17.12",
+		"@types/node": "^20.14.0",
+		"@types/react": "18.2.42",
+		"@types/react-dom": "^18.3.0",
+		"@types/scheduler": "^0.16.8",
+		"bun": "^1.1.12",
+		"bun-types": "^1.1.12",
+		"fast-glob": "^3.3.2",
+		"fs-extra": "^11.2.0",
+		"ts-node": "^10.9.2",
+		"typescript": "^5.4.5"
+	}
 }

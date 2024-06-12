@@ -1,6 +1,5 @@
-import { mix } from '@antv/util'
-
 import { dendrogam, layout, Tree } from './layout'
+import { mix } from './util'
 
 import type { Node, Options } from './types'
 
