@@ -10,11 +10,7 @@
 		"url": "git+https://github.com/openages/stk.git"
 	},
 	"sideEffects": false,
-	"files": [
-		"./dist",
-		"./package.json",
-		"./README.md"
-	],
+	"files": ["./dist", "./package.json", "./README.md"],
 	"exports": {
 		"./common": {
 			"types": "./dist/common/index.d.ts",
@@ -73,13 +69,7 @@
 		"build": "bun bun.config.ts && bun ./node_modules/typescript/lib/tsc.js",
 		"build:test": "rspack build"
 	},
-	"keywords": [
-		"react",
-		"nodejs",
-		"web",
-		"utils",
-		"typescript"
-	],
+	"keywords": ["react", "nodejs", "web", "utils", "typescript"],
 	"dependencies": {
 		"@swc/helpers": "^0.5.11",
 		"ahooks": "^3.8.0",
@@ -88,7 +78,7 @@
 		"mobx": "^6.12.4",
 		"react": "0.0.0-experimental-c3048aab4-20240326",
 		"react-dom": "0.0.0-experimental-c3048aab4-20240326",
-		"scheduler": "0.0.0-experimental-c3048aab4-20240326"
+		"scheduler": "^0.23.2"
 	},
 	"devDependencies": {
 		"@rspack/cli": "0.6.5",
