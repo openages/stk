@@ -85,7 +85,7 @@
 		"ahooks": "^3.8.0",
 		"fast-equals": "^5.0.1",
 		"lodash-es": "^4.17.21",
-		"mobx": "^6.12.5",
+		"mobx": "^6.13.0",
 		"react": "0.0.0-experimental-c3048aab4-20240326",
 		"react-dom": "0.0.0-experimental-c3048aab4-20240326",
 		"scheduler": "^0.23.2"
@@ -104,6 +104,6 @@
 		"fast-glob": "^3.3.2",
 		"fs-extra": "^11.2.0",
 		"ts-node": "^10.9.2",
-		"typescript": "^5.5.2"
+		"typescript": "^5.5.3"
 	}
 }
