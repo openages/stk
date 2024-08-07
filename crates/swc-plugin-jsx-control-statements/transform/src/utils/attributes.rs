@@ -5,6 +5,7 @@ use swc_core::ecma::ast::CondExpr;
 use swc_core::ecma::ast::Expr;
 use swc_core::ecma::ast::ExprOrSpread;
 use swc_core::ecma::ast::Ident;
+use swc_core::ecma::ast::IdentName;
 use swc_core::ecma::ast::JSXAttr;
 use swc_core::ecma::ast::JSXAttrName;
 use swc_core::ecma::ast::JSXAttrOrSpread;
@@ -47,7 +48,7 @@ pub fn get_jsx_element_attribute(
         .iter()
         .find(|attribute| match attribute {
             JSXAttrOrSpread::JSXAttr(JSXAttr {
-                name: JSXAttrName::Ident(Ident { sym, .. }),
+                name: JSXAttrName::Ident(IdentName { sym, .. }),
                 ..
             }) => sym == attribute_name,
             _ => false,
@@ -118,13 +119,13 @@ pub fn validate_jsx_control_statement_attributes(jsx_element: &JSXElement) {
 
             match attribute {
                 JSXAttrOrSpread::JSXAttr(JSXAttr { name, .. }) => match name {
-                    JSXAttrName::Ident(Ident { sym, span, .. }) => {
+                    JSXAttrName::Ident(IdentName { sym, span, .. }) => {
                         if sym != "condition" && sym != "key" {
                             display_error(*span, format!("Unsupported: \"{}\" for <{}>, valid props: \"condition\" and \"key\"!", sym, element_name).as_str());
                         }
                     },
                     JSXAttrName::JSXNamespacedName(JSXNamespacedName {
-                                                       ns: Ident { span, .. },
+                                                       ns: IdentName { span, .. },
                                                        ..
                                                    }) => {
                         display_error(*span, "Unsupported: Namespaced name for JSX control statement tag's prop!");
@@ -151,7 +152,7 @@ pub fn set_jsx_element_attribute(
     for attr in jsx_element.opening.attrs.iter_mut() {
         if let JSXAttrOrSpread::JSXAttr(jsx_attribute) = attr {
             if let JSXAttr {
-                name: JSXAttrName::Ident(Ident { sym, .. }),
+                name: JSXAttrName::Ident(IdentName { sym, .. }),
                 ..
             } = jsx_attribute
             {
@@ -175,10 +176,9 @@ pub fn set_jsx_element_attribute(
             .opening
             .attrs
             .push(JSXAttrOrSpread::JSXAttr(JSXAttr {
-                name: JSXAttrName::Ident(Ident {
+                name: JSXAttrName::Ident(IdentName {
                     span: DUMMY_SP,
                     sym: name.into(),
-                    optional: false,
                 }),
                 value: Some(JSXAttrValue::Lit(Lit::Str(Str {
                     value: value.into(),
