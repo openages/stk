@@ -1,0 +1,10 @@
+[package]
+name = "jsx_control_statements"
+version = "1.0.0"
+edition = "2021"
+
+[dependencies]
+easy-error = { workspace = true }
+serde = { workspace = true }
+swc_core = { workspace = true, features = ["ecma_plugin_transform"] }
+tracing = { workspace = true, features = ["release_max_level_off"]}
