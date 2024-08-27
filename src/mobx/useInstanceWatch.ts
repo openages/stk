@@ -34,7 +34,7 @@ export default (instance: any) => {
 				const old_v = toJS(old_value)
 
 				if (!deepEqual(new_v, old_v)) {
-					reactions[key](new_v, old_v)
+					reactions[key](new_v, old_v).bind(instance)
 				}
 			}
 		)
@@ -51,7 +51,7 @@ export default (instance: any) => {
 			const match_keys = multiple_target.raw.split('|')
 
 			if (match_keys.includes(name)) {
-				watch[multiple_target.raw](match_keys.map(key => get(instance, key)))
+				watch[multiple_target.raw](match_keys.map(key => get(instance, key))).bind(instance)
 			}
 		}
 
@@ -60,7 +60,7 @@ export default (instance: any) => {
 			const old_v = toJS(oldValue)
 
 			if (!deepEqual(new_v, old_v)) {
-				watch[name](new_v, old_v)
+				watch[name](new_v, old_v).bind(instance)
 			}
 		}
 	})
