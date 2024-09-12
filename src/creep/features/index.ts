@@ -619,6 +619,7 @@ export default async function getEngineFeatures({ cssComputed, navigatorComputed
 
 		// css version
 		const { version: cssVersion, features: cssFeatures } = getFeatures({
+			// @ts-ignore
 			context: win,
 			allKeys: computedStyleKeys,
 			engineMap: engineMapCSS
@@ -626,6 +627,7 @@ export default async function getEngineFeatures({ cssComputed, navigatorComputed
 
 		// window version
 		const { version: windowVersion, features: windowFeatures } = getFeatures({
+			// @ts-ignore
 			context: win,
 			allKeys: windowFeaturesKeys,
 			engineMap: engineMapWindow,
@@ -634,6 +636,7 @@ export default async function getEngineFeatures({ cssComputed, navigatorComputed
 
 		// js version
 		const { version: jsVersion, features: jsFeatures } = getFeatures({
+			// @ts-ignore
 			context: win,
 			allKeys: jsFeaturesKeys,
 			engineMap: engineMapJS
@@ -770,6 +773,7 @@ export function featuresHTML(fp) {
 			if (cssKeys) {
 				// @ts-ignore
 				diff = getListDiff({
+					// @ts-ignore
 					oldList: cssKeys.split(', '),
 					newList: computedStyleKeys,
 					removeCamelCase: true
@@ -788,6 +792,7 @@ export function featuresHTML(fp) {
 			if (windowKeys) {
 				// @ts-ignore
 				diff = getListDiff({
+					// @ts-ignore
 					oldList: windowKeys.split(', '),
 					newList: windowFeaturesKeys
 				})
@@ -803,6 +808,7 @@ export function featuresHTML(fp) {
 			if (jsKeys) {
 				// @ts-ignore
 				diff = getListDiff({
+					// @ts-ignore
 					oldList: jsKeys.split(', '),
 					newList: jsFeaturesKeys
 				})
@@ -881,10 +887,10 @@ export function featuresHTML(fp) {
 	const browserIcon = !BROWSER
 		? ''
 		: /chrome/i.test(BROWSER)
-		  ? getIcon('chrome')
-		  : /firefox/i.test(BROWSER)
-			  ? getIcon('firefox')
-			  : ''
+			? getIcon('chrome')
+			: /firefox/i.test(BROWSER)
+				? getIcon('firefox')
+				: ''
 
 	return `
 	<style>
