@@ -1,0 +1,1 @@
+var u=(a,r,l)=>{const s=l||"sort",t=r-1>=0?a.at(r-1):null,e=a.at(r+1);let o=0;if(t&&e)o=parseFloat(((t[s]+e[s])/2).toFixed(3));if(!t&&e)o=parseFloat((e[s]/2).toFixed(3));if(t&&!e)o=t[s]+1;if(!t&&!e)o=1;return a[r][s]=o,{item:a[r],sort:o}};export{u as updateSort};
