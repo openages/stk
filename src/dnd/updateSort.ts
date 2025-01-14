@@ -24,5 +24,5 @@ export default <T>(arr: Array<T>, index: number, sort_key?: string): { item: T; 
 
 	arr[index][sort] = sort_value
 
-	return { item: arr[index], sort: sort_value }
+	return { item: arr[index], sort: sort_value ? sort_value : 666666 }
 }

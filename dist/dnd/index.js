@@ -1,1 +1,1 @@
-var u=(a,r,l)=>{let s=l||"sort",t=r-1>=0?a.at(r-1):null,e=a.at(r+1),o=0;if(t&&e)o=parseFloat(((t[s]+e[s])/2).toFixed(24));if(!t&&e)o=parseFloat((e[s]/1.00000002).toFixed(24));if(t&&!e)o=t[s]*2;if(!t&&!e)o=666666;return a[r][s]=o,{item:a[r],sort:o}};export{u as updateSort};
+var u=(a,r,l)=>{let s=l||"sort",e=r-1>=0?a.at(r-1):null,o=a.at(r+1),t=0;if(e&&o)t=parseFloat(((e[s]+o[s])/2).toFixed(24));if(!e&&o)t=parseFloat((o[s]/1.00000002).toFixed(24));if(e&&!o)t=e[s]*2;if(!e&&!o)t=666666;return a[r][s]=t,{item:a[r],sort:t?t:666666}};export{u as updateSort};
