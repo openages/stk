@@ -1,4 +1,4 @@
-import { find, flatMap, flatten, get, initial, last, omit, reduceRight } from 'lodash-es'
+import { find, flatten, flatMap, get, initial, last, omit, reduceRight } from 'lodash-es'
 import { makeAutoObservable, toJS } from 'mobx'
 
 export type RawNode<T = {}> = {
@@ -37,9 +37,13 @@ export default class Index<T = {}> {
 
 	public init(raw_nodes: RawNodes<T>) {
 		const raw_tree_map = this.getRawTreeMap(raw_nodes)
-		const { tree, tree_map } = this.getTree(raw_nodes, raw_tree_map)
+		const { tree, tree_map, lost_tree } = this.getTree(raw_nodes, raw_tree_map)
 
-		this.tree = this.sortTree(tree, tree_map)
+		const { tree: target_tree, lost_tree: target_lost_tree } = this.sortTree(tree, tree_map, lost_tree)
+
+		this.tree = target_tree
+
+		return target_lost_tree
 	}
 
 	public find(id: string, _tree?: Tree<T>): TreeItem<T> {
@@ -216,31 +220,58 @@ export default class Index<T = {}> {
 
 	private getTree(raw_nodes: RawNodes<T>, tree_map: TreeMap<T>) {
 		const tree = [] as Tree<T>
+		const lost_tree = [] as Tree<T>
 
 		raw_nodes.forEach(item => {
-			if (item.pid) {
-				if (!tree_map[item.pid].children) {
-					tree_map[item.pid].children = []
-				}
+			const prev = tree_map[item.prev_id]
+			const next = tree_map[item.next_id]
 
-				if (!tree_map[item.pid]?.children?.length) {
-					tree_map[item.pid].children = [item]
-				} else {
-					tree_map[item.pid].children.push(item)
-				}
+			if (
+				item.prev_id === item.next_id ||
+				!tree_map[item.id] ||
+				(prev && prev.prev_id === prev.next_id) ||
+				(next && next.prev_id === next.next_id)
+			) {
+				item['prev_id'] = undefined
+				item['next_id'] = undefined
+				item['pid'] = undefined
+
+				tree_map[item.id] = item
+
+				lost_tree.push(item)
 			} else {
-				tree.push(item)
+				if (item.pid) {
+					if (!tree_map[item.pid].children) {
+						tree_map[item.pid].children = []
+					}
+
+					if (!tree_map[item.pid]?.children?.length) {
+						tree_map[item.pid].children = [item]
+					} else {
+						tree_map[item.pid].children.push(item)
+					}
+				} else {
+					tree.push(item)
+				}
 			}
 		})
 
-		return { tree, tree_map }
+		return { tree, tree_map, lost_tree }
 	}
 
-	private sortTree(tree: Tree<T>, tree_map: TreeMap<T>) {
+	private sortTree(tree: Tree<T>, tree_map: TreeMap<T>, lost_tree?: Tree<T>) {
 		const target_tree = [] as Tree<T>
 		const start_node = find(tree, item => !item.prev_id)
 
-		if (!start_node) return []
+		if (!start_node) {
+			if (lost_tree && lost_tree.length) {
+				const tree = this.sortLostTree(lost_tree, tree_map)
+
+				return { tree, lost_tree: tree }
+			}
+
+			return { tree: [], lost_tree: [] }
+		}
 
 		let current = start_node.id
 
@@ -248,7 +279,7 @@ export default class Index<T = {}> {
 			const item = tree_map[current]
 
 			if (item?.children?.length) {
-				item.children = this.sortTree(item.children, tree_map)
+				item.children = this.sortTree(item.children, tree_map).tree
 			}
 
 			target_tree.push(item)
@@ -256,7 +287,31 @@ export default class Index<T = {}> {
 			current = item.next_id
 		}
 
-		return target_tree as Tree<T>
+		if (lost_tree && lost_tree.length) {
+			const lost_sort_tree = this.sortLostTree(lost_tree, tree_map)
+
+			lost_sort_tree[0].prev_id = target_tree.at(-1).id
+
+			target_tree.push(...lost_sort_tree)
+		}
+
+		return { tree: target_tree as Tree<T>, lost_tree }
+	}
+
+	private sortLostTree(tree: Tree<T>, tree_map: TreeMap<T>) {
+		return tree.map((item, index) => {
+			const next = tree.at(index + 1)
+
+			if (next) {
+				item.next_id = next.id
+				next.prev_id = item.id
+
+				tree_map[item.id] = item
+				tree_map[next.id] = next
+			}
+
+			return item
+		})
 	}
 
 	private take(indexes: Array<number>, swap?: boolean) {

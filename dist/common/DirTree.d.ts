@@ -18,7 +18,7 @@ type ArgsMove = {
 export default class Index<T = {}> {
     tree: Tree<T>;
     constructor();
-    init(raw_nodes: RawNodes<T>): void;
+    init(raw_nodes: RawNodes<T>): TreeItem<T>[];
     find(id: string, _tree?: Tree<T>): TreeItem<T>;
     insert(item: RawNode<T>, focusing_index?: Array<number>): {
         item: RawNode<T>;
@@ -51,6 +51,7 @@ export default class Index<T = {}> {
     private getRawTreeMap;
     private getTree;
     private sortTree;
+    private sortLostTree;
     private take;
     private place;
     private getUniqEffectItems;
